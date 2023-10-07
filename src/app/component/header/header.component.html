@@ -1,0 +1,18 @@
+<header class="bg-blue-500 p-4 text-white shadow-md">
+  <div class="container mx-auto">
+      <div class="flex justify-between items-center">
+          <div class="flex space-x-8 items-center">
+              <a href="/" class="text-2xl font-bold">My Logo</a>
+              <nav class="flex space-x-4">
+                  <ul class="flex space-x-4">
+                      <li><a href="/decks" class="hover:text-gray-300">Baralhos</a></li>
+                      <li><a href="/decks/new" class="hover:text-gray-300">Criar Baralho</a></li>
+                  </ul>
+              </nav>
+          </div>
+          <div class="flex items-center space-x-2">
+              <igx-switch [(ngModel)]="isDarkMode" (change)="changeTheme()"></igx-switch>
+          </div>
+      </div>
+  </div>
+</header>
