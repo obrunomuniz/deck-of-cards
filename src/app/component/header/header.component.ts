@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { IgxNavigationDrawerComponent } from 'igniteui-angular';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
         { name: 'add_box', text: 'Criar Baralho', route: '/decks/new' }
     ]; 
 
+    isOpen = false;
     public selected = 'Baralhos';
 
     public navigateTo(item: { text: string, route: string }) {
@@ -26,11 +27,19 @@ export class HeaderComponent implements OnInit {
         this.router.navigate([item.route]);
     }
     
-    isDarkMode = false;
-    isOpen = true;
+    isDarkMode = false; 
     pin = true; 
 
-    constructor(private pokemonService: PokemonService, private router: Router) {}
+    constructor(private pokemonService: PokemonService, private router: Router) {
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+              const activeNavItem = this.navItems.find(item => item.route === event.url);
+              if (activeNavItem) {
+                this.selected = activeNavItem.text;
+              }
+            }
+          });
+    }
 
     ngOnInit() {
         this.isDarkMode = this.pokemonService.getTheme() === 'dark';
