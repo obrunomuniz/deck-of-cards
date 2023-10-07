@@ -1,41 +1,50 @@
 export interface PokemonTCGResponse {
-  data: Card[];
-  page: number;
-  pageSize: number;
-  count: number;
-  totalCount: number;
+  cards: Card[];
+  page?: number;
+  pageSize?: number;
+  count?: number;
+  totalCount?: number;
 }
 
 export interface Card {
   id: string;
   name: string;
-  supertype: string;
-  subtypes: string[];
-  level?: string;
-  hp?: string;
+  nationalPokedexNumber?: number;
+  imageUrl: string;
+  imageUrlHiRes: string;
   types?: string[];
+  supertype: string;
+  subtype: string;
   evolvesFrom?: string;
-  abilities?: Ability[];
+  hp?: string;
+  retreatCost?: string[];
+  convertedRetreatCost?: number;
+  number: string;
+  artist: string;
+  rarity: string;
+  series: string;
+  set: string;
+  setCode: string;
   attacks?: Attack[];
   weaknesses?: Weakness[];
-  //TODO: add outros campos
-}
-
-export interface Ability {
-  name: string;
-  text: string;
-  type: string;
+  resistances?: Resistance[];
+  // TODO: adicione outros campos conforme necessário
 }
 
 export interface Attack {
-  name: string;
   cost: string[];
-  convertedEnergyCost: number;
-  damage: string;
+  name: string;
   text: string;
+  damage: string;
+  convertedEnergyCost: number;
 }
 
 export interface Weakness {
+  type: string;
+  value: string;
+}
+
+export interface Resistance {
   type: string;
   value: string;
 }
