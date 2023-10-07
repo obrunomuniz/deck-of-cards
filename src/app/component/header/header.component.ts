@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { IgxNavigationDrawerComponent } from 'igniteui-angular';
+import { Router } from '@angular/router';
+import { IgxNavigationDrawerComponent, IgxToggleDirective } from 'igniteui-angular';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
     selector: 'app-header',
@@ -10,14 +10,17 @@ import { PokemonService } from 'src/app/service/pokemon.service';
 export class HeaderComponent implements OnInit {
     @ViewChild(IgxNavigationDrawerComponent, { static: true })
     public drawer: IgxNavigationDrawerComponent | null = null;
+    public loading = false;
+
+    @ViewChild(IgxToggleDirective, { static: true })
+    private toggleButton: IgxToggleDirective | null = null;
 
     public navItems = [
         { name: 'view_module', text: 'Baralhos', route: '/decks' },
         { name: 'add_box', text: 'Criar Baralho', route: '/decks/new' }
     ]; 
 
-    isOpen = false;
-    public selected = 'Baralhos';
+    public selected = 'Baralhos'; 
 
     public navigateTo(item: { text: string, route: string }) {
         this.selected = item.text;
@@ -27,22 +30,15 @@ export class HeaderComponent implements OnInit {
         this.router.navigate([item.route]);
     }
     
-    isDarkMode = false; 
+    isDarkMode = false;
+    isOpen = false;
     pin = true; 
 
-    constructor(private pokemonService: PokemonService, private router: Router) {
-        this.router.events.subscribe(event => {
-            if (event instanceof NavigationEnd) {
-              const activeNavItem = this.navItems.find(item => item.route === event.url);
-              if (activeNavItem) {
-                this.selected = activeNavItem.text;
-              }
-            }
-          });
-    }
+    constructor(private pokemonService: PokemonService, private router: Router) {}
 
     ngOnInit() {
         this.isDarkMode = this.pokemonService.getTheme() === 'dark';
+       // this.loadData();
     }
 
     changeTheme() {
@@ -54,6 +50,26 @@ export class HeaderComponent implements OnInit {
     }
 
     toggleDrawer(): void {
-        this.isOpen = !this.isOpen;
+        if (this.toggleButton) {
+            this.toggleButton.toggle();
+        }
     }
+
+    // Função para carregar os dados
+    /* loadData() {
+        this.loading = true; // Ative o indicador de carregamento
+        this.pokemonService.getDecks()
+            .pipe(
+                catchError((error) => {
+                    console.error('Erro ao carregar os dados:', error);
+                    return throwError(() => new Error('test'));
+                }),
+                finalize(() => {
+                    this.loading = false; // Desative o indicador de carregamento quando os dados estiverem prontos ou ocorrer um erro
+                })
+            )
+            .subscribe((decks) => {
+                // Aqui você recebe os dados dos baralhos
+            });
+    } */
 }

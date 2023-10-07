@@ -11,13 +11,15 @@ import { HeaderComponent } from './component/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { PokemonService } from './service/pokemon.service';
 import { HttpClientModule } from '@angular/common/http';
+import { LoadingSpinnerComponent } from './component/loading-spinner/loading-spinner.component';
 @NgModule({
   declarations: [
     AppComponent,
     DeckListComponent,
     DeckEditComponent,
     DeckDetailComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
