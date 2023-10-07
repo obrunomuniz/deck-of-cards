@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IgxPaginatorComponent } from 'igniteui-angular';
 import { Deck } from 'src/app/interface/deck.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
@@ -9,11 +10,14 @@ import { PokemonService } from 'src/app/service/pokemon.service';
 export class DeckListComponent implements OnInit {
   decks: Deck[] = [];
   loading = false;
+  perPage = 10;
+  @ViewChild('paginator', { static: true }) public paginator!: IgxPaginatorComponent;
+
 
   constructor(private pokemonService: PokemonService) { }
 
   ngOnInit(): void {
-    this.loadData(); // Iniciar o carregamento de dados ao inicializar o componente
+    this.loadData();
   }
 
   // Função para carregar os dados
@@ -23,6 +27,9 @@ export class DeckListComponent implements OnInit {
       next: decks => {
         console.log('Decks recebidos:', decks);
         this.decks = decks;
+        this.paginator.perPage = this.perPage;
+        this.paginator.totalRecords = decks.length;
+        this.paginator.page = 0; // Garante que a página seja definida como 0 ao carregar os dados
       },
       error: error => console.error('Erro ao obter baralhos:', error),
       complete: () => {
