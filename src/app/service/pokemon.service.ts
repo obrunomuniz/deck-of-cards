@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
 import { PokemonTCGResponse } from '../interface/pokemon.interface';
 import { Deck } from '../interface/deck.interface';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -42,4 +41,26 @@ export class PokemonService {
     this.decks = this.decks.filter(deck => deck.id !== id);
   }
 
+  //Métodos para o thema
+  getTheme(): string | null {
+    return localStorage.getItem('theme');
+  }
+
+  setTheme(theme: string): void {
+    localStorage.setItem('theme', theme);
+    if (theme === 'dark') {
+      this.activateDarkTheme();
+    } else {
+      this.activateLightTheme();
+    }
+  }
+
+  private activateDarkTheme(): void {
+    document.body.classList.add('dark');
+  }
+
+  private activateLightTheme(): void {
+    document.body.classList.remove('dark');
+  }
+  
 }

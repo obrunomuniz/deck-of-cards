@@ -16,3 +16,17 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+body.dark header {
+    background-color: #1E3A8A;
+    color: white;
+}
+/* body.dark {
+    estilos globais para o tema escuro 
+    background-color: #1E3A8A;
+    color: white; 
+}
+
+body.dark .bg-blue-500 {
+    background-color: #1E3A8A; // Cor alternativa quando em modo escuro
+} */
