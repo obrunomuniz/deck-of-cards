@@ -43,4 +43,8 @@ export class DeckListComponent implements OnInit {
   viewDeckDetails(id: string): void {
     // Navegar para a página de detalhes com o ID do baralho
   }
+
+  addDeck(){
+    
+  }
 }
