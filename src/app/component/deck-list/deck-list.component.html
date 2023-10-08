@@ -1,1 +1,23 @@
-<p>deck-list works!</p>
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div class="container mx-auto p-6">
+    <div class="flex justify-between items-center mb-4">
+        <div class="flex-grow"></div>
+        <button
+            class="bg-blue-500 hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center">
+            <igx-icon family="material" class="text-xl m-0 p-0" style="position: relative; top: -2px;">add</igx-icon>
+        </button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div *ngFor="let deck of decks"
+            class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
+            <h2 class="text-xl mb-2">{{ deck.name }}</h2>
+            <div class="flex justify-end space-x-2">
+                <button class="text-blue-500 hover:text-blue-700" (click)="editDeck(deck.id)">Editar</button>
+                <button class="text-red-500 hover:text-red-700" (click)="removeDeck(deck.id)">Remover</button>
+                <button class="text-green-500 hover:text-green-700" (click)="viewDeckDetails(deck.id)">Detalhes</button>
+            </div>
+        </div>
+    </div>
+    <!-- Componente de paginação aqui -->
+    <igx-paginator #paginator [totalRecords]="decks.length" [perPage]="perPage"></igx-paginator>
+</div>
