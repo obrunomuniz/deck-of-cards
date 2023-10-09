@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IgxPaginatorComponent } from 'igniteui-angular';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
-
 @Component({
   selector: 'app-deck-list',
   templateUrl: './deck-list.component.html',
@@ -34,14 +33,8 @@ export class DeckListComponent implements OnInit {
     this.pokemonService.getDecks().subscribe({
       next: decks => {
         this.decks = decks;
-        this.paginator.perPage = +this.itemsPerPage;
-        this.paginator.totalRecords = decks.length;
-        this.paginator.page = 0;
+        this.loading = false;
         this.updateDisplayedDecks();
-        this.cdr.detectChanges();
-        console.log('Decks recebidos:', this.decks);
-        console.log('this.paginator.perPage:', this.paginator.perPage);
-        console.log('this.paginator.totalRecords', this.paginator.totalRecords);
         this.loading = false;
       },
       error: error => {
@@ -67,22 +60,21 @@ export class DeckListComponent implements OnInit {
   addDeck() {
     // Lógica para adicionar um novo baralho
   }
-
-  public navigateToFirstPage(event: any) {
-    this.paginator.page = 0;
-    this.updateDisplayedDecks();
-  }
   
   updateDisplayedDecks() {
-    const startIndex = this.paginator.page * this.paginator.perPage;
-    const endIndex = Math.min(startIndex + this.paginator.perPage, this.decks.length);
-    this.displayedDecks = this.decks.slice(startIndex, endIndex);
+    if (this.paginator && this.paginator.page !== undefined) {
+      const startIndex = this.paginator.page * this.itemsPerPage;
+      const endIndex = Math.min(startIndex + this.itemsPerPage, this.decks.length);
+      this.displayedDecks = this.decks.slice(startIndex, endIndex);
+    }
   }
 
-  public onItemsPerPageChange(event: any) {
-    this.itemsPerPage = +event;
-    this.paginator.perPage = this.itemsPerPage;
-    this.updateDisplayedDecks();
-    this.cdr.detectChanges();
+  onItemsPerPageChange(event: number) {
+    this.itemsPerPage = event;
+    if (this.paginator) {
+      this.paginator.perPage = this.itemsPerPage;
+      this.paginator.page = 0;
+      this.updateDisplayedDecks();
+    }
   }
 }

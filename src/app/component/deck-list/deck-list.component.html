@@ -17,10 +17,10 @@
             </div>
         </div>
     </div>
-    <!-- Componente de paginação aqui -->
     <igx-paginator #paginator
-        [perPage]="itemsPerPage"
-        [totalRecords]="decks.length"
-        (perPageChange)="onItemsPerPageChange($event)">
+      [perPage]="itemsPerPage"
+      [totalRecords]="decks.length"
+      (pageChange)="updateDisplayedDecks()"
+      (perPageChange)="onItemsPerPageChange($event)">
     </igx-paginator>
 </div>
