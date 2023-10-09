@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { IgxDialogComponent, IgxPaginatorComponent } from 'igniteui-angular';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
@@ -16,12 +16,15 @@ export class DeckListComponent implements OnInit {
   currentPage = 0;
   decks: Card[] = [];
   displayedDecks: Card[] = [];
-
-  //Add/Edit decks
-  @ViewChild('deckDialog', { static: false }) dialog!: IgxDialogComponent;
+ 
   selectedDeck: Card | undefined;
-  isEditing = false;
-  
+  isEditing = false; 
+  @ViewChild('deckDialog', { static: false }) deckDialog!: IgxDialogComponent;
+  newCardName = '';
+  @Input() isOpen = false;
+  @Output() closeModalEvent = new EventEmitter<boolean>();
+
+
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -59,15 +62,13 @@ export class DeckListComponent implements OnInit {
   }
 
   addDeck() {
-    this.selectedDeck = undefined;
-    this.isEditing = false;
-    this.dialog.open();
+    this.deckDialog.open();
   }
 
   editDeck(id: string): void {
     /* this.selectedDeck = deck;
     this.isEditing = true;
-    this.dialog.open(); */
+    this.deckDialog.open(); */
   } 
 
   onDeckSaved(deck: Card): void {
@@ -78,11 +79,11 @@ export class DeckListComponent implements OnInit {
       // Handle creation logic here
       console.log('New deck created:', deck);
     }
-    this.dialog.close();
+    this.deckDialog.close();
   }
 
   onCancel(): void {
-    this.dialog.close();
+    this.deckDialog.close();
   }
   
   updateDisplayedDecks() {
@@ -101,8 +102,18 @@ export class DeckListComponent implements OnInit {
       this.updateDisplayedDecks();
     }
   }
-  
-  onDeckChange(newDeck: Card | undefined) {
-    this.selectedDeck = newDeck;
+
+  onSubmit(){
+    //TODO: logica para salvar
+     if (this.newCardName) {
+      this.closeModal();
+    }
   }
+
+  closeModal() {
+    this.isOpen = false;
+    this.closeModalEvent.emit(false);
+    this.newCardName = ''; // Limpar o campo do nome do card ao fechar o modal
+  }
+   
 }

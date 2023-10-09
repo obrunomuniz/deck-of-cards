@@ -3,15 +3,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule, IPaginatorResourceStrings, changei18n, IgxDialogModule } from 'igniteui-angular';
-import { DeckListComponent } from './component/deck-list/deck-list.component';
+import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule, IPaginatorResourceStrings, changei18n, IgxDialogModule, IgxInputGroupModule } from 'igniteui-angular';
 import { DeckDetailComponent } from './component/deck-detail/deck-detail.component';
 import { HeaderComponent } from './component/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { PokemonService } from './service/pokemon.service';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './component/loading-spinner/loading-spinner.component';
-import { DeckFormComponent } from './component/deck-form/deck-form.component';
+import { DeckListComponent } from './component/deck-list/deck-list.component';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { DeckFormComponent } from './component/deck-form/deck-form.component';
     DeckListComponent,
     DeckDetailComponent,
     HeaderComponent,
-    LoadingSpinnerComponent,
-    DeckFormComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +34,10 @@ import { DeckFormComponent } from './component/deck-form/deck-form.component';
     IgxToggleModule,
     IgxPaginatorModule,
     IgxGridModule,
-    IgxDialogModule
+    IgxDialogModule,
+    IgxIconModule, 
+    IgxInputGroupModule,
+     
   ],
   providers: [PokemonService, ],
   bootstrap: [AppComponent]
