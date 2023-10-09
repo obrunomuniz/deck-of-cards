@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IgxPaginatorComponent } from 'igniteui-angular';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
+
 @Component({
   selector: 'app-deck-list',
   templateUrl: './deck-list.component.html',
@@ -9,19 +10,18 @@ import { PokemonService } from 'src/app/service/pokemon.service';
 })
 export class DeckListComponent implements OnInit {
   @ViewChild('paginator', { static: true }) public paginator!: IgxPaginatorComponent;
-  loading = false; 
+  loading = false;
   event: any;
 
   itemsPerPage = 12;
   currentPage = 0;
   decks: Card[] = [];
-
-
+  displayedDecks: Card[] = [];
 
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.loadData(); 
+    this.loadData();
   }
 
   ngAfterViewInit() {
@@ -34,10 +34,9 @@ export class DeckListComponent implements OnInit {
     this.pokemonService.getDecks().subscribe({
       next: decks => {
         this.decks = decks;
-        this.paginator.perPage = this.itemsPerPage;
+        this.paginator.perPage = +this.itemsPerPage;
         this.paginator.totalRecords = decks.length;
         this.paginator.page = 0;
-        
         this.updateDisplayedDecks();
         this.cdr.detectChanges();
         console.log('Decks recebidos:', this.decks);
@@ -70,15 +69,20 @@ export class DeckListComponent implements OnInit {
   }
 
   public navigateToFirstPage(event: any) {
-  console.log('perPageChange event:', event);
-  this.paginator.page = 0;
-  this.updateDisplayedDecks();
-}
+    this.paginator.page = 0;
+    this.updateDisplayedDecks();
+  }
   
   updateDisplayedDecks() {
     const startIndex = this.paginator.page * this.paginator.perPage;
-    const endIndex = startIndex + this.paginator.perPage;
-    this.decks = this.decks.slice(startIndex, endIndex);
+    const endIndex = Math.min(startIndex + this.paginator.perPage, this.decks.length);
+    this.displayedDecks = this.decks.slice(startIndex, endIndex);
   }
-  
+
+  public onItemsPerPageChange(event: any) {
+    this.itemsPerPage = +event;
+    this.paginator.perPage = this.itemsPerPage;
+    this.updateDisplayedDecks();
+    this.cdr.detectChanges();
+  }
 }
