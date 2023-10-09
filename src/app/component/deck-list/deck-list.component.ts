@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { IgxPaginatorComponent } from 'igniteui-angular';
+import { IgxDialogComponent, IgxPaginatorComponent } from 'igniteui-angular';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
@@ -17,6 +17,11 @@ export class DeckListComponent implements OnInit {
   decks: Card[] = [];
   displayedDecks: Card[] = [];
 
+  //Add/Edit decks
+  @ViewChild('deckDialog', { static: false }) dialog!: IgxDialogComponent;
+  selectedDeck: Card | undefined;
+  isEditing = false;
+  
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -44,10 +49,6 @@ export class DeckListComponent implements OnInit {
     });
   }
 
-  editDeck(id: string): void {
-    // Navegar para a página de edição com o ID do baralho
-  }
-
   removeDeck(id: string): void {
     this.pokemonService.removeDeck(id);
     this.loadData();
@@ -58,7 +59,30 @@ export class DeckListComponent implements OnInit {
   }
 
   addDeck() {
-    // Lógica para adicionar um novo baralho
+    this.selectedDeck = undefined;
+    this.isEditing = false;
+    this.dialog.open();
+  }
+
+  editDeck(id: string): void {
+    /* this.selectedDeck = deck;
+    this.isEditing = true;
+    this.dialog.open(); */
+  } 
+
+  onDeckSaved(deck: Card): void {
+    if (this.isEditing) {
+      // Handle editing logic here
+      console.log('Deck edited:', deck);
+    } else {
+      // Handle creation logic here
+      console.log('New deck created:', deck);
+    }
+    this.dialog.close();
+  }
+
+  onCancel(): void {
+    this.dialog.close();
   }
   
   updateDisplayedDecks() {
@@ -76,5 +100,9 @@ export class DeckListComponent implements OnInit {
       this.paginator.page = 0;
       this.updateDisplayedDecks();
     }
+  }
+  
+  onDeckChange(newDeck: Card | undefined) {
+    this.selectedDeck = newDeck;
   }
 }

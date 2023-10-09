@@ -3,24 +3,24 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule, IPaginatorResourceStrings, changei18n } from 'igniteui-angular';
+import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule, IPaginatorResourceStrings, changei18n, IgxDialogModule } from 'igniteui-angular';
 import { DeckListComponent } from './component/deck-list/deck-list.component';
-import { DeckEditComponent } from './component/deck-edit/deck-edit.component';
 import { DeckDetailComponent } from './component/deck-detail/deck-detail.component';
 import { HeaderComponent } from './component/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { PokemonService } from './service/pokemon.service';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './component/loading-spinner/loading-spinner.component';
+import { DeckFormComponent } from './component/deck-form/deck-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DeckListComponent,
-    DeckEditComponent,
     DeckDetailComponent,
     HeaderComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    DeckFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +36,7 @@ import { LoadingSpinnerComponent } from './component/loading-spinner/loading-spi
     IgxToggleModule,
     IgxPaginatorModule,
     IgxGridModule,
+    IgxDialogModule
   ],
   providers: [PokemonService, ],
   bootstrap: [AppComponent]
