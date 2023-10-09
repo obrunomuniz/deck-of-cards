@@ -19,5 +19,7 @@
         </div>
     </div>
     <!-- Componente de paginação aqui -->
-    <igx-paginator #paginator [totalRecords]="decks.length" [perPage]="perPage"></igx-paginator>
+    <igx-paginator #paginator 
+        (perPageChange)="navigateToFirstPage($event)">
+    </igx-paginator>  
 </div>

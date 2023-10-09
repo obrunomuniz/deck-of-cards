@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IgxButtonModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule  } from 'igniteui-angular';
+import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule  } from 'igniteui-angular';
 import { DeckListComponent } from './component/deck-list/deck-list.component';
 import { DeckEditComponent } from './component/deck-edit/deck-edit.component';
 import { DeckDetailComponent } from './component/deck-detail/deck-detail.component';
@@ -33,7 +33,8 @@ import { LoadingSpinnerComponent } from './component/loading-spinner/loading-spi
     IgxNavigationDrawerModule,
     IgxRippleModule,
     IgxToggleModule,
-    IgxPaginatorModule
+    IgxPaginatorModule,
+    IgxGridModule,
   ],
   providers: [PokemonService],
   bootstrap: [AppComponent]

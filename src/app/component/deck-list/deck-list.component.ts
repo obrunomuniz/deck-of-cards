@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IgxPaginatorComponent } from 'igniteui-angular';
-import { Deck } from 'src/app/interface/deck.interface';
+import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
   selector: 'app-deck-list',
@@ -8,16 +8,24 @@ import { PokemonService } from 'src/app/service/pokemon.service';
   styleUrls: ['./deck-list.component.scss']
 })
 export class DeckListComponent implements OnInit {
-  decks: Deck[] = [];
-  loading = false;
-  perPage = 10;
   @ViewChild('paginator', { static: true }) public paginator!: IgxPaginatorComponent;
+  loading = false; 
+  event: any;
+
+  itemsPerPage = 12;
+  currentPage = 0;
+  decks: Card[] = [];
 
 
-  constructor(private pokemonService: PokemonService) { }
+
+  constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadData(); 
+  }
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
   }
 
   // Função para carregar os dados
@@ -25,14 +33,20 @@ export class DeckListComponent implements OnInit {
     this.loading = true;
     this.pokemonService.getDecks().subscribe({
       next: decks => {
-        console.log('Decks recebidos:', decks);
         this.decks = decks;
-        this.paginator.perPage = this.perPage;
+        this.paginator.perPage = this.itemsPerPage;
         this.paginator.totalRecords = decks.length;
-        this.paginator.page = 0; // Garante que a página seja definida como 0 ao carregar os dados
+        this.paginator.page = 0;
+        
+        this.updateDisplayedDecks();
+        this.cdr.detectChanges();
+        console.log('Decks recebidos:', this.decks);
+        console.log('this.paginator.perPage:', this.paginator.perPage);
+        console.log('this.paginator.totalRecords', this.paginator.totalRecords);
+        this.loading = false;
       },
-      error: error => console.error('Erro ao obter baralhos:', error),
-      complete: () => {
+      error: error => {
+        console.error('Erro ao obter baralhos:', error);
         this.loading = false;
       }
     });
@@ -44,7 +58,6 @@ export class DeckListComponent implements OnInit {
 
   removeDeck(id: string): void {
     this.pokemonService.removeDeck(id);
-    // Recarregar a lista após a remoção
     this.loadData();
   }
 
@@ -55,4 +68,17 @@ export class DeckListComponent implements OnInit {
   addDeck() {
     // Lógica para adicionar um novo baralho
   }
+
+  public navigateToFirstPage(event: any) {
+  console.log('perPageChange event:', event);
+  this.paginator.page = 0;
+  this.updateDisplayedDecks();
+}
+  
+  updateDisplayedDecks() {
+    const startIndex = this.paginator.page * this.paginator.perPage;
+    const endIndex = startIndex + this.paginator.perPage;
+    this.decks = this.decks.slice(startIndex, endIndex);
+  }
+  
 }
