@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule, IPaginatorResourceStrings, changei18n, IgxDialogModule, IgxInputGroupModule } from 'igniteui-angular';
 import { DeckDetailComponent } from './component/deck-detail/deck-detail.component';
 import { HeaderComponent } from './component/header/header.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PokemonService } from './service/pokemon.service';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './component/loading-spinner/loading-spinner.component';
@@ -37,7 +37,7 @@ import { DeckListComponent } from './component/deck-list/deck-list.component';
     IgxDialogModule,
     IgxIconModule, 
     IgxInputGroupModule,
-     
+    ReactiveFormsModule
   ],
   providers: [PokemonService, ],
   bootstrap: [AppComponent]

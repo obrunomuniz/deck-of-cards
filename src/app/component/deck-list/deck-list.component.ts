@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IgxDialogComponent, IgxPaginatorComponent } from 'igniteui-angular';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
@@ -24,11 +25,21 @@ export class DeckListComponent implements OnInit {
   @Input() isOpen = false;
   @Output() closeModalEvent = new EventEmitter<boolean>();
 
+  deckForm: FormGroup;
 
-  constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) { }
+
+  constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef,
+    private fb: FormBuilder) { 
+      this.deckForm = this.fb.group({
+        cardName: ['', Validators.required]
+      });
+    }
 
   ngOnInit(): void {
     this.loadData();
+    this.deckForm = this.fb.group({
+      cardName: ['', Validators.required],
+    });
   }
 
   ngAfterViewInit() {
@@ -53,7 +64,7 @@ export class DeckListComponent implements OnInit {
 
   removeDeck(id: string): void {
     this.pokemonService.removeDeck(id);
-    this.loadData();
+    //this.loadData();
   }
 
   viewDeckDetails(id: string): void {
@@ -61,14 +72,17 @@ export class DeckListComponent implements OnInit {
   }
 
   addDeck() {
+    this.selectedDeck = undefined;
+    this.isEditing = false;
     this.deckDialog.open();
   }
 
-  editDeck(id: string): void {
-    /* this.selectedDeck = deck;
-    this.isEditing = true;
-    this.deckDialog.open(); */
-  }
+editDeck(id: string): void { 
+  this.selectedDeck = this.decks.find(deck => deck.id === id);
+  this.isEditing = true;
+  this.deckForm.get('cardName')?.setValue(this.selectedDeck?.name || '');
+  this.deckDialog.open();
+}
 
   onCancel(): void {
     this.deckDialog.close();
@@ -92,31 +106,59 @@ export class DeckListComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.newCardName) {
-      // Criar um novo baralho com o nome fornecido
-      const newDeck: Card = {
-        id: Math.random().toString(36).substring(7),
-        name: this.newCardName,
-      };
-
-      // Add o novo baralho à lista de baralhos em memória
-      this.pokemonService.addDeck(newDeck);
-
-      // Adicione o novo baralho diretamente à lista local
-      this.decks.unshift(newDeck);
-
+    if (this.deckForm.valid) {
+      const newCardName = this.deckForm.value.cardName;
+  
+      if (this.isEditing && this.selectedDeck) {
+        // Editar um baralho existente
+        this.selectedDeck.name = newCardName;
+  
+        // Atualize o baralho usando o serviço
+        this.pokemonService.editDeck(this.selectedDeck.id, this.selectedDeck);
+      } else {
+        // Criar um novo baralho com o nome fornecido
+        const newDeck: Card = {
+          id: Math.random().toString(36).substring(7),
+          name: newCardName,
+        };
+  
+        // Adicione o novo baralho no início da lista
+        this.decks.unshift(newDeck);
+  
+        // Adicione o novo baralho diretamente ao serviço
+        this.pokemonService.addDeck(newDeck);
+      }
+  
       // Atualize a exibição dos baralhos
       this.updateDisplayedDecks();
-
-      // Feche o modal
+  
+      // Feche o modal e redefina o formulário
       this.closeModal();
+      this.deckForm.reset();
     }
   }
+  
 
   closeModal() {
     this.isOpen = false;
     this.deckDialog.close();
-    this.newCardName = ''; // Limpar o campo do nome do card ao fechar o modal
+    this.newCardName = '';
+  }
+
+  updateEditedName(): void {
+    if (this.selectedDeck) {
+      const newName = this.deckForm.get('cardName')?.value.trim();
+      const currentIndex = this.decks.indexOf(this.selectedDeck);
+  
+      if (newName !== '') {
+        // Atualiza apenas a parte editada do nome, mantendo o restante
+        this.selectedDeck.name = newName;
+        this.decks[currentIndex] = this.selectedDeck;
+      } else {
+        // Se o novo nome for em branco, redefina-o para o nome anterior
+        this.deckForm.get('cardName')?.setValue(this.selectedDeck.name);
+      }
+    }
   }
 
 }
