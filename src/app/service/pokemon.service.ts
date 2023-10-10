@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { environment } from 'src/environment/environment';
 import { Card, PokemonTCGResponse } from '../interface/pokemon.interface';
 
@@ -23,8 +23,9 @@ export class PokemonService {
       map((response: PokemonTCGResponse) => {
         console.log("Resposta da API:", response);
         const apiDecks: Card[] = response.cards.map((card: Card) => (
-          { id: card.id, name: card.name,
-            imageUrl: card.imageUrl, 
+          {
+            id: card.id, name: card.name,
+            imageUrl: card.imageUrl,
             imageUrlHiRes: card.imageUrlHiRes,
             supertype: card.supertype,
             subtype: card.subtype,
@@ -38,13 +39,12 @@ export class PokemonService {
             weaknesses: card.weaknesses,
             resistances: card.resistances
           }
-          ));
+        ));
         console.log("apiDecks", apiDecks)
         return [...apiDecks, ...this.decks];
       })
     );
   }
-
 
   // Métodos relacionados aos baralhos em memória
   addDeck(deck: Card): void {

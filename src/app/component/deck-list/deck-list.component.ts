@@ -27,13 +27,12 @@ export class DeckListComponent implements OnInit {
 
   deckForm: FormGroup;
 
-
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef,
-    private fb: FormBuilder) { 
-      this.deckForm = this.fb.group({
-        cardName: ['', Validators.required]
-      });
-    }
+    private fb: FormBuilder) {
+    this.deckForm = this.fb.group({
+      cardName: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.loadData();
@@ -64,7 +63,8 @@ export class DeckListComponent implements OnInit {
 
   removeDeck(id: string): void {
     this.pokemonService.removeDeck(id);
-    //this.loadData();
+    this.decks = this.decks.filter(deck => deck.id !== id);
+    this.updateDisplayedDecks();
   }
 
   viewDeckDetails(id: string): void {
@@ -77,15 +77,11 @@ export class DeckListComponent implements OnInit {
     this.deckDialog.open();
   }
 
-editDeck(id: string): void { 
-  this.selectedDeck = this.decks.find(deck => deck.id === id);
-  this.isEditing = true;
-  this.deckForm.get('cardName')?.setValue(this.selectedDeck?.name || '');
-  this.deckDialog.open();
-}
-
-  onCancel(): void {
-    this.deckDialog.close();
+  editDeck(id: string): void {
+    this.selectedDeck = this.decks.find(deck => deck.id === id);
+    this.isEditing = true;
+    this.deckForm.get('cardName')?.setValue(this.selectedDeck?.name || '');
+    this.deckDialog.open();
   }
 
   updateDisplayedDecks() {
@@ -108,12 +104,12 @@ editDeck(id: string): void {
   onSubmit() {
     if (this.deckForm.valid) {
       const newCardName = this.deckForm.value.cardName;
-  
+
       if (this.isEditing && this.selectedDeck) {
         // Editar um baralho existente
         this.selectedDeck.name = newCardName;
-  
-        // Atualize o baralho usando o serviço
+
+        // Atualizar o baralho usando o serviço
         this.pokemonService.editDeck(this.selectedDeck.id, this.selectedDeck);
       } else {
         // Criar um novo baralho com o nome fornecido
@@ -121,23 +117,21 @@ editDeck(id: string): void {
           id: Math.random().toString(36).substring(7),
           name: newCardName,
         };
-  
-        // Adicione o novo baralho no início da lista
+
+        // Adicionar o novo baralho no início da lista
         this.decks.unshift(newDeck);
-  
+
         // Adicione o novo baralho diretamente ao serviço
         this.pokemonService.addDeck(newDeck);
       }
-  
-      // Atualize a exibição dos baralhos
+
+      // Atualizar a exibição dos baralhos
       this.updateDisplayedDecks();
-  
-      // Feche o modal e redefina o formulário
       this.closeModal();
       this.deckForm.reset();
     }
   }
-  
+
 
   closeModal() {
     this.isOpen = false;
@@ -149,7 +143,7 @@ editDeck(id: string): void {
     if (this.selectedDeck) {
       const newName = this.deckForm.get('cardName')?.value.trim();
       const currentIndex = this.decks.indexOf(this.selectedDeck);
-  
+
       if (newName !== '') {
         // Atualiza apenas a parte editada do nome, mantendo o restante
         this.selectedDeck.name = newName;
@@ -160,5 +154,4 @@ editDeck(id: string): void {
       }
     }
   }
-
 }
