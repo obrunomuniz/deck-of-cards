@@ -8,7 +8,7 @@ export interface PokemonTCGResponse {
 
 export interface Card {
   id: string;
-  name: string;
+  name: any;
   nationalPokedexNumber?: number;
   imageUrl?: string;
   imageUrlHiRes?: string;

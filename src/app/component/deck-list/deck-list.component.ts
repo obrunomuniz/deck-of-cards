@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { IgxDialogComponent, IgxPaginatorComponent } from 'igniteui-angular';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
@@ -28,7 +29,7 @@ export class DeckListComponent implements OnInit {
   deckForm: FormGroup;
 
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef,
-    private fb: FormBuilder) {
+    private fb: FormBuilder, private router: Router) {
     this.deckForm = this.fb.group({
       cardName: ['', Validators.required]
     });
@@ -48,7 +49,7 @@ export class DeckListComponent implements OnInit {
   // Função para carregar os dados
   loadData() {
     this.loading = true;
-    this.pokemonService.getDecks().subscribe({
+    this.pokemonService.loadCards().subscribe({
       next: decks => {
         this.decks.unshift(...decks);
         this.updateDisplayedDecks();
@@ -67,8 +68,8 @@ export class DeckListComponent implements OnInit {
     this.updateDisplayedDecks();
   }
 
-  viewDeckDetails(id: string): void {
-    // Navegar para a página de detalhes com o ID do baralho
+  viewDeckDetails(id: string): void { 
+    this.router.navigate(['/deck-detail', id]);
   }
 
   addDeck() {

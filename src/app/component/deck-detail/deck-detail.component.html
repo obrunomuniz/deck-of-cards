@@ -1,1 +1,9 @@
-<p>deck-detail works!</p>
+
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<div *ngIf="card">
+    <h2>Name: {{ card.name }}</h2>
+    <img [src]="card.imageUrl" alt="{{ card.name }}" />
+    <p>Supertype: {{ card.supertype }}</p>
+    <p>Subtype: {{ card.subtype }}</p>
+  </div>
+  
