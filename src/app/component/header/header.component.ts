@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { IgxNavigationDrawerComponent, IgxToggleDirective } from 'igniteui-angular';
 import { PokemonService } from 'src/app/service/pokemon.service';
+import { Location } from '@angular/common';
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -21,6 +22,7 @@ export class HeaderComponent implements OnInit {
     ]; 
 
     public selected = 'Baralhos'; 
+     showBackButton = false;  
 
     public navigateTo(item: { text: string, route: string }) {
         this.selected = item.text;
@@ -34,11 +36,18 @@ export class HeaderComponent implements OnInit {
     isOpen = false;
     pin = true; 
 
-    constructor(private pokemonService: PokemonService, private router: Router) {}
+    constructor(private pokemonService: PokemonService, private router: Router,
+        private location: Location) {
+            this.router.events.subscribe((event) => {
+                if (event instanceof NavigationEnd) {
+                    //Se a URL for '/deck-detail', mostre o botão "Voltar"
+                    this.showBackButton = event.url.startsWith('/deck-detail');
+                }
+            });
+        }
 
     ngOnInit() {
         this.isDarkMode = this.pokemonService.getTheme() === 'dark';
-       // this.loadData();
     }
 
     changeTheme() {
@@ -55,21 +64,7 @@ export class HeaderComponent implements OnInit {
         }
     }
 
-    // Função para carregar os dados
-    /* loadData() {
-        this.loading = true; // Ative o indicador de carregamento
-        this.pokemonService.getDecks()
-            .pipe(
-                catchError((error) => {
-                    console.error('Erro ao carregar os dados:', error);
-                    return throwError(() => new Error('test'));
-                }),
-                finalize(() => {
-                    this.loading = false; // Desative o indicador de carregamento quando os dados estiverem prontos ou ocorrer um erro
-                })
-            )
-            .subscribe((decks) => {
-                // Aqui você recebe os dados dos baralhos
-            });
-    } */
+    voltar(): void {
+        this.location.back();
+    }
 }
