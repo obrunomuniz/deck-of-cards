@@ -16,9 +16,9 @@ export class DeckListComponent implements OnInit {
   currentPage = 0;
   decks: Card[] = [];
   displayedDecks: Card[] = [];
- 
+
   selectedDeck: Card | undefined;
-  isEditing = false; 
+  isEditing = false;
   @ViewChild('deckDialog', { static: false }) deckDialog!: IgxDialogComponent;
   newCardName = '';
   @Input() isOpen = false;
@@ -40,8 +40,7 @@ export class DeckListComponent implements OnInit {
     this.loading = true;
     this.pokemonService.getDecks().subscribe({
       next: decks => {
-        this.decks = decks;
-        this.loading = false;
+        this.decks.unshift(...decks);
         this.updateDisplayedDecks();
         this.loading = false;
       },
@@ -69,23 +68,12 @@ export class DeckListComponent implements OnInit {
     /* this.selectedDeck = deck;
     this.isEditing = true;
     this.deckDialog.open(); */
-  } 
-
-  onDeckSaved(deck: Card): void {
-    if (this.isEditing) {
-      // Handle editing logic here
-      console.log('Deck edited:', deck);
-    } else {
-      // Handle creation logic here
-      console.log('New deck created:', deck);
-    }
-    this.deckDialog.close();
   }
 
   onCancel(): void {
     this.deckDialog.close();
   }
-  
+
   updateDisplayedDecks() {
     if (this.paginator && this.paginator.page !== undefined) {
       const startIndex = this.paginator.page * this.itemsPerPage;
@@ -103,17 +91,32 @@ export class DeckListComponent implements OnInit {
     }
   }
 
-  onSubmit(){
-    //TODO: logica para salvar
-     if (this.newCardName) {
+  onSubmit() {
+    if (this.newCardName) {
+      // Criar um novo baralho com o nome fornecido
+      const newDeck: Card = {
+        id: Math.random().toString(36).substring(7),
+        name: this.newCardName,
+      };
+
+      // Add o novo baralho à lista de baralhos em memória
+      this.pokemonService.addDeck(newDeck);
+
+      // Adicione o novo baralho diretamente à lista local
+      this.decks.unshift(newDeck);
+
+      // Atualize a exibição dos baralhos
+      this.updateDisplayedDecks();
+
+      // Feche o modal
       this.closeModal();
     }
   }
 
   closeModal() {
     this.isOpen = false;
-    this.closeModalEvent.emit(false);
+    this.deckDialog.close();
     this.newCardName = ''; // Limpar o campo do nome do card ao fechar o modal
   }
-   
+
 }
