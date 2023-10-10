@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environment/environment';
 import { Card, PokemonTCGResponse } from '../interface/pokemon.interface';
 
@@ -18,7 +18,20 @@ export class PokemonService {
     return this.http.get<PokemonTCGResponse>(`${environment.api.url}cards?page=${page}`);
   }
 
-  getDecks(): Observable<Card[]> {
+  getCard(id: string): Observable<Card> {
+    const card = this.decks.find(deck => deck.id === id);
+    if (card) {
+      return of(card);
+    } else {
+      return this.http.get<any>(`${environment.api.url}cards/${id}`)
+        .pipe(
+          map(response => response.card)
+        );
+    }
+  }
+  
+
+  loadCards(): Observable<Card[]> {
     return this.getCards().pipe(
       map((response: PokemonTCGResponse) => {
         console.log("Resposta da API:", response);

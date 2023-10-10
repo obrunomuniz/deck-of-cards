@@ -6,7 +6,7 @@ import { DeckDetailComponent } from './component/deck-detail/deck-detail.compone
 const routes: Routes = [
   { path: '', redirectTo: '/decks', pathMatch: 'full' },
   { path: 'decks', component: DeckListComponent },
-  { path: 'decks/:id', component: DeckDetailComponent }
+  { path: 'deck-detail/:id', component: DeckDetailComponent }
 ];
 
 @NgModule({
