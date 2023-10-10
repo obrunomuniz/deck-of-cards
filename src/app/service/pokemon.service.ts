@@ -10,10 +10,11 @@ import { Card, PokemonTCGResponse } from '../interface/pokemon.interface';
 })
 export class PokemonService {
   private decks: Card[] = [];
+  private cards: Card[] = [];
 
   constructor(private http: HttpClient) { }
 
-  // Métodos relacionados à API do Pokémon
+  // Métodos relacionados aos Cards
   getCards(page: number = 1): Observable<PokemonTCGResponse> {
     return this.http.get<PokemonTCGResponse>(`${environment.api.url}cards?page=${page}`);
   }
@@ -29,7 +30,6 @@ export class PokemonService {
         );
     }
   }
-  
 
   loadCards(): Observable<Card[]> {
     return this.getCards().pipe(
@@ -58,6 +58,22 @@ export class PokemonService {
       })
     );
   }
+
+  removeCard(id: string): void {
+    this.cards = this.cards.filter(card => card.id !== id);
+  }
+
+  editCard(id: string, updatedCard: Card): void {
+    const index = this.cards.findIndex(card => card.id === id);
+    if (index !== -1) {
+      this.cards[index] = updatedCard;
+    }
+  }
+
+  addCard(card: Card): void {
+    this.cards.push(card);
+  }
+  
 
   // Métodos relacionados aos baralhos em memória
   addDeck(deck: Card): void {

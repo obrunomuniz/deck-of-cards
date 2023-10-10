@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DeckListComponent } from './component/deck-list/deck-list.component';
-import { DeckDetailComponent } from './component/deck-detail/deck-detail.component';
+ import { DeckDetailComponent } from './component/deck-detail/deck-detail.component';
+import { CardListComponent } from './component/card-list/card-list.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/decks', pathMatch: 'full' },
-  { path: 'decks', component: DeckListComponent },
-  { path: 'deck-detail/:id', component: DeckDetailComponent }
+  { path: '', redirectTo: '/cards', pathMatch: 'full' },
+  { path: 'cards', component: CardListComponent },
+  { path: 'card-detail/:id', component: DeckDetailComponent }
 ];
 
 @NgModule({

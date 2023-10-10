@@ -10,12 +10,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PokemonService } from './service/pokemon.service';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './component/loading-spinner/loading-spinner.component';
-import { DeckListComponent } from './component/deck-list/deck-list.component';
-
+import { CardListComponent } from './component/card-list/card-list.component';
 @NgModule({
   declarations: [
     AppComponent,
-    DeckListComponent,
+    CardListComponent,
     DeckDetailComponent,
     HeaderComponent,
     LoadingSpinnerComponent

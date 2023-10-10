@@ -5,39 +5,39 @@ import { IgxDialogComponent, IgxPaginatorComponent } from 'igniteui-angular';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
-  selector: 'app-deck-list',
-  templateUrl: './deck-list.component.html',
-  styleUrls: ['./deck-list.component.scss']
+  selector: 'app-card-list',
+  templateUrl: './card-list.component.html',
+  styleUrls: ['./card-list.component.scss']
 })
-export class DeckListComponent implements OnInit {
+export class CardListComponent implements OnInit {
   @ViewChild('paginator', { static: true }) public paginator!: IgxPaginatorComponent;
   loading = false;
   event: any;
 
   itemsPerPage = 12;
   currentPage = 0;
-  decks: Card[] = [];
-  displayedDecks: Card[] = [];
+  cards: Card[] = [];
+  displayedCards: Card[] = [];
 
-  selectedDeck: Card | undefined;
+  selectedCard: Card | undefined;
   isEditing = false;
-  @ViewChild('deckDialog', { static: false }) deckDialog!: IgxDialogComponent;
+  @ViewChild('cardDialog', { static: false }) cardDialog!: IgxDialogComponent;
   newCardName = '';
   @Input() isOpen = false;
   @Output() closeModalEvent = new EventEmitter<boolean>();
 
-  deckForm: FormGroup;
+  cardForm: FormGroup;
 
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef,
     private fb: FormBuilder, private router: Router) {
-    this.deckForm = this.fb.group({
+    this.cardForm = this.fb.group({
       cardName: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.loadData();
-    this.deckForm = this.fb.group({
+    this.cardForm = this.fb.group({
       cardName: ['', Validators.required],
     });
   }
@@ -50,9 +50,9 @@ export class DeckListComponent implements OnInit {
   loadData() {
     this.loading = true;
     this.pokemonService.loadCards().subscribe({
-      next: decks => {
-        this.decks.unshift(...decks);
-        this.updateDisplayedDecks();
+      next: cards => {
+        this.cards.unshift(...cards);
+        this.updateDisplayedCards();
         this.loading = false;
       },
       error: error => {
@@ -62,34 +62,34 @@ export class DeckListComponent implements OnInit {
     });
   }
 
-  removeDeck(id: string): void {
-    this.pokemonService.removeDeck(id);
-    this.decks = this.decks.filter(deck => deck.id !== id);
-    this.updateDisplayedDecks();
+  removeCard(id: string): void {
+    this.pokemonService.removeCard(id);
+    this.cards = this.cards.filter(card => card.id !== id);
+    this.updateDisplayedCards();
   }
 
-  viewDeckDetails(id: string): void { 
-    this.router.navigate(['/deck-detail', id]);
+  viewCardDetails(id: string): void { 
+    this.router.navigate(['/card-detail', id]);
   }
 
-  addDeck() {
-    this.selectedDeck = undefined;
+  addCard() {
+    this.selectedCard = undefined;
     this.isEditing = false;
-    this.deckDialog.open();
+    this.cardDialog.open();
   }
 
-  editDeck(id: string): void {
-    this.selectedDeck = this.decks.find(deck => deck.id === id);
+  editCard(id: string): void {
+    this.selectedCard = this.cards.find(card => card.id === id);
     this.isEditing = true;
-    this.deckForm.get('cardName')?.setValue(this.selectedDeck?.name || '');
-    this.deckDialog.open();
+    this.cardForm.get('cardName')?.setValue(this.selectedCard?.name || '');
+    this.cardDialog.open();
   }
 
-  updateDisplayedDecks() {
+  updateDisplayedCards() {
     if (this.paginator && this.paginator.page !== undefined) {
       const startIndex = this.paginator.page * this.itemsPerPage;
-      const endIndex = Math.min(startIndex + this.itemsPerPage, this.decks.length);
-      this.displayedDecks = this.decks.slice(startIndex, endIndex);
+      const endIndex = Math.min(startIndex + this.itemsPerPage, this.cards.length);
+      this.displayedCards = this.cards.slice(startIndex, endIndex);
     }
   }
 
@@ -98,60 +98,60 @@ export class DeckListComponent implements OnInit {
     if (this.paginator) {
       this.paginator.perPage = this.itemsPerPage;
       this.paginator.page = 0;
-      this.updateDisplayedDecks();
+      this.updateDisplayedCards();
     }
   }
 
   onSubmit() {
-    if (this.deckForm.valid) {
-      const newCardName = this.deckForm.value.cardName;
+    if (this.cardForm.valid) {
+      const newCardName = this.cardForm.value.cardName;
 
-      if (this.isEditing && this.selectedDeck) {
+      if (this.isEditing && this.selectedCard) {
         // Editar um baralho existente
-        this.selectedDeck.name = newCardName;
+        this.selectedCard.name = newCardName;
 
         // Atualizar o baralho usando o serviço
-        this.pokemonService.editDeck(this.selectedDeck.id, this.selectedDeck);
+        this.pokemonService.editCard(this.selectedCard.id, this.selectedCard);
       } else {
         // Criar um novo baralho com o nome fornecido
-        const newDeck: Card = {
+        const newCard: Card = {
           id: Math.random().toString(36).substring(7),
           name: newCardName,
         };
 
         // Adicionar o novo baralho no início da lista
-        this.decks.unshift(newDeck);
+        this.cards.unshift(newCard);
 
         // Adicione o novo baralho diretamente ao serviço
-        this.pokemonService.addDeck(newDeck);
+        this.pokemonService.addCard(newCard);
       }
 
       // Atualizar a exibição dos baralhos
-      this.updateDisplayedDecks();
+      this.updateDisplayedCards();
       this.closeModal();
-      this.deckForm.reset();
+      this.cardForm.reset();
     }
   }
 
 
   closeModal() {
     this.isOpen = false;
-    this.deckDialog.close();
+    this.cardDialog.close();
     this.newCardName = '';
   }
 
   updateEditedName(): void {
-    if (this.selectedDeck) {
-      const newName = this.deckForm.get('cardName')?.value.trim();
-      const currentIndex = this.decks.indexOf(this.selectedDeck);
+    if (this.selectedCard) {
+      const newName = this.cardForm.get('cardName')?.value.trim();
+      const currentIndex = this.cards.indexOf(this.selectedCard);
 
       if (newName !== '') {
         // Atualiza apenas a parte editada do nome, mantendo o restante
-        this.selectedDeck.name = newName;
-        this.decks[currentIndex] = this.selectedDeck;
+        this.selectedCard.name = newName;
+        this.cards[currentIndex] = this.selectedCard;
       } else {
         // Se o novo nome for em branco, redefina-o para o nome anterior
-        this.deckForm.get('cardName')?.setValue(this.selectedDeck.name);
+        this.cardForm.get('cardName')?.setValue(this.selectedCard.name);
       }
     }
   }
