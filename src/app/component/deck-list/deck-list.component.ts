@@ -24,7 +24,6 @@ export class DeckListComponent implements OnInit {
   @Input() isOpen = false;
   @Output() closeModalEvent = new EventEmitter<boolean>();
 
-
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -61,13 +60,16 @@ export class DeckListComponent implements OnInit {
   }
 
   addDeck() {
+    this.selectedDeck = undefined;
+    this.isEditing = false;
     this.deckDialog.open();
   }
 
-  editDeck(id: string): void {
-    /* this.selectedDeck = deck;
+  editDeck(id: string): void { 
+    this.selectedDeck = this.decks.find(deck => deck.id === id);
     this.isEditing = true;
-    this.deckDialog.open(); */
+    this.newCardName = this.selectedDeck?.name || '';
+    this.deckDialog.open();
   }
 
   onCancel(): void {
@@ -93,25 +95,38 @@ export class DeckListComponent implements OnInit {
 
   onSubmit() {
     if (this.newCardName) {
-      // Criar um novo baralho com o nome fornecido
-      const newDeck: Card = {
-        id: Math.random().toString(36).substring(7),
-        name: this.newCardName,
-      };
-
-      // Add o novo baralho à lista de baralhos em memória
-      this.pokemonService.addDeck(newDeck);
-
-      // Adicione o novo baralho diretamente à lista local
-      this.decks.unshift(newDeck);
-
+      if (this.isEditing && this.selectedDeck) {
+        // Editar um baralho existente
+        this.selectedDeck.name = this.newCardName;
+  
+        // Encontrar e atualizar o baralho na lista local
+        const index = this.decks.findIndex(deck => deck.id === this.selectedDeck!.id);
+        if (index !== -1) {
+          this.decks[index] = this.selectedDeck;
+        }
+      } else {
+        // Criar um novo baralho com o nome fornecido
+        const newDeck: Card = {
+          id: Math.random().toString(36).substring(7),
+          name: this.newCardName,
+        };
+  
+        // Adicione o novo baralho à lista de baralhos em memória
+        this.pokemonService.addDeck(newDeck);
+  
+        // Adicione o novo baralho diretamente à lista local
+        this.decks.unshift(newDeck);
+      }
+  
       // Atualize a exibição dos baralhos
       this.updateDisplayedDecks();
-
+  
       // Feche o modal
       this.closeModal();
     }
   }
+  
+  
 
   closeModal() {
     this.isOpen = false;

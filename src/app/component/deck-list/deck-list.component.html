@@ -29,7 +29,7 @@
 <igx-dialog #deckDialog [closeOnOutsideSelect]="true">
     <igx-dialog-title>
         <div class="title-container">
-            <div class="dialog-title">Criar novo</div>
+            <div class="dialog-title">{{ isEditing ? 'Editar' : 'Criar novo' }}</div>
         </div>
     </igx-dialog-title>
     <form (ngSubmit)="onSubmit()" #cardForm="ngForm"> 
@@ -41,11 +41,11 @@
             <input igxInput type="text" id="cardName" name="cardName" [(ngModel)]="newCardName" required  />
             <div *ngIf="cardForm.controls['cardName'].invalid && cardForm.controls['cardName'].touched" class="text-red-500 text-xs mt-1">
                 O nome do card é obrigatório.
-              </div>
+            </div>
         </igx-input-group> 
-      </form>
+    </form>
     <div igxDialogActions>
         <button igxButton (click)="deckDialog.close()">CANCELAR</button>
-        <button igxButton (click)="onSubmit()">SALVAR</button>
+        <button igxButton (click)="onSubmit()">{{ isEditing ? 'ATUALIZAR' : 'SALVAR' }}</button>
     </div>
 </igx-dialog>
