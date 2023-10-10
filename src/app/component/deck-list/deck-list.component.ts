@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { IgxPaginatorComponent } from 'igniteui-angular';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { IgxDialogComponent, IgxPaginatorComponent } from 'igniteui-angular';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
@@ -17,6 +17,14 @@ export class DeckListComponent implements OnInit {
   decks: Card[] = [];
   displayedDecks: Card[] = [];
 
+  selectedDeck: Card | undefined;
+  isEditing = false;
+  @ViewChild('deckDialog', { static: false }) deckDialog!: IgxDialogComponent;
+  newCardName = '';
+  @Input() isOpen = false;
+  @Output() closeModalEvent = new EventEmitter<boolean>();
+
+
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -32,8 +40,7 @@ export class DeckListComponent implements OnInit {
     this.loading = true;
     this.pokemonService.getDecks().subscribe({
       next: decks => {
-        this.decks = decks;
-        this.loading = false;
+        this.decks.unshift(...decks);
         this.updateDisplayedDecks();
         this.loading = false;
       },
@@ -42,10 +49,6 @@ export class DeckListComponent implements OnInit {
         this.loading = false;
       }
     });
-  }
-
-  editDeck(id: string): void {
-    // Navegar para a página de edição com o ID do baralho
   }
 
   removeDeck(id: string): void {
@@ -58,9 +61,19 @@ export class DeckListComponent implements OnInit {
   }
 
   addDeck() {
-    // Lógica para adicionar um novo baralho
+    this.deckDialog.open();
   }
-  
+
+  editDeck(id: string): void {
+    /* this.selectedDeck = deck;
+    this.isEditing = true;
+    this.deckDialog.open(); */
+  }
+
+  onCancel(): void {
+    this.deckDialog.close();
+  }
+
   updateDisplayedDecks() {
     if (this.paginator && this.paginator.page !== undefined) {
       const startIndex = this.paginator.page * this.itemsPerPage;
@@ -77,4 +90,33 @@ export class DeckListComponent implements OnInit {
       this.updateDisplayedDecks();
     }
   }
+
+  onSubmit() {
+    if (this.newCardName) {
+      // Criar um novo baralho com o nome fornecido
+      const newDeck: Card = {
+        id: Math.random().toString(36).substring(7),
+        name: this.newCardName,
+      };
+
+      // Add o novo baralho à lista de baralhos em memória
+      this.pokemonService.addDeck(newDeck);
+
+      // Adicione o novo baralho diretamente à lista local
+      this.decks.unshift(newDeck);
+
+      // Atualize a exibição dos baralhos
+      this.updateDisplayedDecks();
+
+      // Feche o modal
+      this.closeModal();
+    }
+  }
+
+  closeModal() {
+    this.isOpen = false;
+    this.deckDialog.close();
+    this.newCardName = ''; // Limpar o campo do nome do card ao fechar o modal
+  }
+
 }
