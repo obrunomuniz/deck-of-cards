@@ -4,18 +4,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule, IPaginatorResourceStrings, changei18n, IgxDialogModule, IgxInputGroupModule, IgxNavbarModule } from 'igniteui-angular';
-import { DeckDetailComponent } from './component/deck-detail/deck-detail.component';
-import { HeaderComponent } from './component/header/header.component';
+ import { HeaderComponent } from './component/header/header.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PokemonService } from './service/pokemon.service';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './component/loading-spinner/loading-spinner.component';
 import { CardListComponent } from './component/card-list/card-list.component';
+import { CardDetailComponent } from './component/card-detail/card-detail.component';
 @NgModule({
   declarations: [
     AppComponent,
     CardListComponent,
-    DeckDetailComponent,
+    CardDetailComponent,
     HeaderComponent,
     LoadingSpinnerComponent
   ],

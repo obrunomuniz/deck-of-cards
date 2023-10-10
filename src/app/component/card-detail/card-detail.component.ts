@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Card } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
-  selector: 'app-deck-detail',
-  templateUrl: './deck-detail.component.html',
-  styleUrls: ['./deck-detail.component.scss']
+  selector: 'app-card-detail',
+  templateUrl: './card-detail.component.html',
+  styleUrls: ['./card-detail.component.scss']
 })
-export class DeckDetailComponent implements OnInit {
+export class CardDetailComponent implements OnInit {
   card: Card | null = null;
   loading: boolean = false; 
 

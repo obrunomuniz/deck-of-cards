@@ -17,8 +17,8 @@ export class HeaderComponent implements OnInit {
     private toggleButton: IgxToggleDirective | null = null;
 
     public navItems = [
-        { name: 'view_module', text: 'Baralhos', route: '/decks' },
-        { name: 'add_box', text: 'Criar Baralho', route: '/decks/new' }
+        { name: 'view_module', text: 'Baralhos', route: '/cards' },
+        { name: 'add_box', text: 'Criar Baralho', route: '/cards/new' }
     ]; 
 
     public selected = 'Baralhos'; 
@@ -40,8 +40,8 @@ export class HeaderComponent implements OnInit {
         private location: Location) {
             this.router.events.subscribe((event) => {
                 if (event instanceof NavigationEnd) {
-                    //Se a URL for '/deck-detail', mostre o botão "Voltar"
-                    this.showBackButton = event.url.startsWith('/deck-detail');
+                    //Se a URL for '/card-detail', mostre o botão "Voltar"
+                    this.showBackButton = event.url.startsWith('/card-detail');
                 }
             });
         }
