@@ -37,10 +37,10 @@
         <igx-prefix>
           <igx-icon>person</igx-icon>
         </igx-prefix>
-        <label igxLabel for="cardName">Nome do Card</label>
-        <input igxInput type="text" id="cardName" formControlName="cardName" required (input)="updateEditedName()" />
-        <div *ngIf="deckForm.controls['cardName'].invalid && deckForm.controls['cardName'].touched" class="text-red-500 text-xs mt-1">
-          O nome do card é obrigatório.
+        <label igxLabel for="deckName">Nome do Baralho</label>
+        <input igxInput type="text" id="deckName" formControlName="deckName" required (input)="updateEditedName()" />
+        <div *ngIf="deckForm.controls['deckName'].invalid && deckForm.controls['deckName'].touched" class="text-red-500 text-xs mt-1">
+          O nome do barallho é obrigatório.
         </div>
       </igx-input-group>
     </form>

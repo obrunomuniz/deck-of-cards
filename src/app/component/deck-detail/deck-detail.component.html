@@ -1,9 +1,9 @@
 
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
-<div *ngIf="card">
-    <h2>Name: {{ card.name }}</h2>
-    <img [src]="card.imageUrl" alt="{{ card.name }}" />
-    <p>Supertype: {{ card.supertype }}</p>
-    <p>Subtype: {{ card.subtype }}</p>
+<div *ngIf="deck">
+    <h2>Name: {{ deck.name }}</h2>
+    <img [src]="deck.imageUrl" alt="{{ deck.name }}" />
+    <p>Supertype: {{ deck.supertype }}</p>
+    <p>Subtype: {{ deck.subtype }}</p>
   </div>
   

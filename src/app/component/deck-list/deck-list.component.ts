@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, View
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IgxDialogComponent, IgxPaginatorComponent } from 'igniteui-angular';
-import { Card } from 'src/app/interface/pokemon.interface';
+import { Deck } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
   selector: 'app-deck-list',
@@ -16,13 +16,13 @@ export class DeckListComponent implements OnInit {
 
   itemsPerPage = 12;
   currentPage = 0;
-  decks: Card[] = [];
-  displayedDecks: Card[] = [];
+  decks: Deck[] = [];
+  displayedDecks: Deck[] = [];
 
-  selectedDeck: Card | undefined;
+  selectedDeck: Deck | undefined;
   isEditing = false;
   @ViewChild('deckDialog', { static: false }) deckDialog!: IgxDialogComponent;
-  newCardName = '';
+  newDeckdName = '';
   @Input() isOpen = false;
   @Output() closeModalEvent = new EventEmitter<boolean>();
 
@@ -31,14 +31,14 @@ export class DeckListComponent implements OnInit {
   constructor(private pokemonService: PokemonService, private cdr: ChangeDetectorRef,
     private fb: FormBuilder, private router: Router) {
     this.deckForm = this.fb.group({
-      cardName: ['', Validators.required]
+      deckName: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.loadData();
     this.deckForm = this.fb.group({
-      cardName: ['', Validators.required],
+      deckName: ['', Validators.required],
     });
   }
 
@@ -49,7 +49,7 @@ export class DeckListComponent implements OnInit {
   // Função para carregar os dados
   loadData() {
     this.loading = true;
-    this.pokemonService.loadCards().subscribe({
+    this.pokemonService.loadDecks().subscribe({
       next: decks => {
         this.decks.unshift(...decks);
         this.updateDisplayedDecks();
@@ -81,7 +81,7 @@ export class DeckListComponent implements OnInit {
   editDeck(id: string): void {
     this.selectedDeck = this.decks.find(deck => deck.id === id);
     this.isEditing = true;
-    this.deckForm.get('cardName')?.setValue(this.selectedDeck?.name || '');
+    this.deckForm.get('deckName')?.setValue(this.selectedDeck?.name || '');
     this.deckDialog.open();
   }
 
@@ -104,19 +104,19 @@ export class DeckListComponent implements OnInit {
 
   onSubmit() {
     if (this.deckForm.valid) {
-      const newCardName = this.deckForm.value.cardName;
+      const newDeckdName = this.deckForm.value.deckName;
 
       if (this.isEditing && this.selectedDeck) {
         // Editar um baralho existente
-        this.selectedDeck.name = newCardName;
+        this.selectedDeck.name = newDeckdName;
 
         // Atualizar o baralho usando o serviço
         this.pokemonService.editDeck(this.selectedDeck.id, this.selectedDeck);
       } else {
         // Criar um novo baralho com o nome fornecido
-        const newDeck: Card = {
+        const newDeck: Deck = {
           id: Math.random().toString(36).substring(7),
-          name: newCardName,
+          name: newDeckdName,
         };
 
         // Adicionar o novo baralho no início da lista
@@ -137,12 +137,12 @@ export class DeckListComponent implements OnInit {
   closeModal() {
     this.isOpen = false;
     this.deckDialog.close();
-    this.newCardName = '';
+    this.newDeckdName = '';
   }
 
   updateEditedName(): void {
     if (this.selectedDeck) {
-      const newName = this.deckForm.get('cardName')?.value.trim();
+      const newName = this.deckForm.get('deckName')?.value.trim();
       const currentIndex = this.decks.indexOf(this.selectedDeck);
 
       if (newName !== '') {
@@ -151,7 +151,7 @@ export class DeckListComponent implements OnInit {
         this.decks[currentIndex] = this.selectedDeck;
       } else {
         // Se o novo nome for em branco, redefina-o para o nome anterior
-        this.deckForm.get('cardName')?.setValue(this.selectedDeck.name);
+        this.deckForm.get('deckName')?.setValue(this.selectedDeck.name);
       }
     }
   }

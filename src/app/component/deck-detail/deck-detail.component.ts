@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Card } from 'src/app/interface/pokemon.interface';
+import { Deck } from 'src/app/interface/pokemon.interface';
 import { PokemonService } from 'src/app/service/pokemon.service';
 @Component({
   selector: 'app-deck-detail',
@@ -8,17 +8,17 @@ import { PokemonService } from 'src/app/service/pokemon.service';
   styleUrls: ['./deck-detail.component.scss']
 })
 export class DeckDetailComponent implements OnInit {
-  card: Card | null = null;
+  deck: Deck | null = null;
   loading: boolean = false; 
 
   constructor(private route: ActivatedRoute, private pokemonService: PokemonService) { }
 
   ngOnInit(): void {
-    const cardId = this.route.snapshot.paramMap.get('id');
-    if (cardId) {
+    const deckId = this.route.snapshot.paramMap.get('id');
+    if (deckId) {
       this.loading = true;
-      this.pokemonService.getCard(cardId).subscribe(card => {
-        this.card = card;
+      this.pokemonService.getDeck(deckId).subscribe(deck => {
+        this.deck = deck;
         this.loading = false;
       });
     }

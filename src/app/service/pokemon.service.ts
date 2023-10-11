@@ -3,25 +3,25 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environment/environment';
-import { Card, PokemonTCGResponse } from '../interface/pokemon.interface';
+import { Deck, PokemonTCGResponse } from '../interface/pokemon.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PokemonService {
-  private decks: Card[] = [];
+  private decks: Deck[] = [];
 
   constructor(private http: HttpClient) { }
 
-  // Métodos relacionados à API do Pokémon
-  getCards(page: number = 1): Observable<PokemonTCGResponse> {
+  // Métodos relacionados aos baralhos
+  getDecks(page: number = 1): Observable<PokemonTCGResponse> {
     return this.http.get<PokemonTCGResponse>(`${environment.api.url}cards?page=${page}`);
   }
 
-  getCard(id: string): Observable<Card> {
-    const card = this.decks.find(deck => deck.id === id);
-    if (card) {
-      return of(card);
+  getDeck(id: string): Observable<Deck> {
+    const deck = this.decks.find(deck => deck.id === id);
+    if (deck) {
+      return of(deck);
     } else {
       return this.http.get<any>(`${environment.api.url}cards/${id}`)
         .pipe(
@@ -29,28 +29,27 @@ export class PokemonService {
         );
     }
   }
-  
 
-  loadCards(): Observable<Card[]> {
-    return this.getCards().pipe(
+  loadDecks(): Observable<Deck[]> {
+    return this.getDecks().pipe(
       map((response: PokemonTCGResponse) => {
         console.log("Resposta da API:", response);
-        const apiDecks: Card[] = response.cards.map((card: Card) => (
+        const apiDecks: Deck[] = response.cards.map((deck: Deck) => (
           {
-            id: card.id, name: card.name,
-            imageUrl: card.imageUrl,
-            imageUrlHiRes: card.imageUrlHiRes,
-            supertype: card.supertype,
-            subtype: card.subtype,
-            number: card.number,
-            artist: card.artist,
-            rarity: card.rarity,
-            series: card.series,
-            set: card.set,
-            setCode: card.setCode,
-            attacks: card.attacks,
-            weaknesses: card.weaknesses,
-            resistances: card.resistances
+            id: deck.id, name: deck.name,
+            imageUrl: deck.imageUrl,
+            imageUrlHiRes: deck.imageUrlHiRes,
+            supertype: deck.supertype,
+            subtype: deck.subtype,
+            number: deck.number,
+            artist: deck.artist,
+            rarity: deck.rarity,
+            series: deck.series,
+            set: deck.set,
+            setCode: deck.setCode,
+            attacks: deck.attacks,
+            weaknesses: deck.weaknesses,
+            resistances: deck.resistances
           }
         ));
         console.log("apiDecks", apiDecks)
@@ -60,15 +59,11 @@ export class PokemonService {
   }
 
   // Métodos relacionados aos baralhos em memória
-  addDeck(deck: Card): void {
+  addDeck(deck: Deck): void {
     this.decks.push(deck);
   }
 
-  getDeck(id: string): Card | undefined {
-    return this.decks.find(deck => deck.id === id);
-  }
-
-  editDeck(id: string, updatedDeck: Card): void {
+  editDeck(id: string, updatedDeck: Deck): void {
     const index = this.decks.findIndex(deck => deck.id === id);
     if (index !== -1) {
       this.decks[index] = updatedDeck;
