@@ -22,6 +22,8 @@ export class DeckDetailComponent implements OnInit {
   public message: string = '';
   public actionText: string = 'Fechar';
   disabledButtonAdd: boolean = false;
+  currentDeckId: string | null = null;
+  currentDeckName: string | null = null;
 
   constructor(private route: ActivatedRoute, private pokemonService: PokemonService,
     private router: Router, private fb: FormBuilder) {
@@ -36,8 +38,22 @@ export class DeckDetailComponent implements OnInit {
       this.loading = true;
       this.pokemonService.getDeck(deckId).subscribe(deck => {
         this.deck = deck;
-        this.deckCards = deck.cards || [];
-        this.loading = false;
+        this.currentDeckId = deck.id;
+        this.currentDeckName = deck.name;
+
+        // Verificando se o baralho é novo (sem cartas)
+        if (this.deck.cards && this.deck.cards.length === 0) {
+          this.pokemonService.getRandomCards(24).subscribe(randomCards => {
+            if (this.deck) {
+              this.deck.cards = randomCards;
+              this.deckCards = this.deck.cards;
+              this.loading = false;
+          }
+          });
+        } else {
+          this.deckCards = deck.cards || [];
+          this.loading = false;
+        }
       });
     }
   }
@@ -101,7 +117,24 @@ export class DeckDetailComponent implements OnInit {
     this.cardForm.reset();
   }
 
-  saveDeck(){
-    this.router.navigate(['/decks']);
+  saveDeck(){  
+      if (this.deckCards.length < 24) { 
+        this.showMessage("Seu baralho precisa ter no mínimo 24 cartas.");
+        return;
+      }
+      if (this.deckCards.length > 60) { 
+        this.showMessage("Seu baralho não pode ter mais de 60 cartas.");
+        return;
+      } 
+      if (this.currentDeckId && this.currentDeckName) {
+        const editedDeck: Deck = {
+            id: this.currentDeckId,
+            name: this.currentDeckName,
+            cards: this.deckCards
+        }; 
+        //configurar baralho editado
+        this.pokemonService.setCurrentEditedDeck(editedDeck);
+    }
+    this.router.navigate(['/decks']);   
   }
 }

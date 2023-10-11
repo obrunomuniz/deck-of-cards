@@ -10,6 +10,8 @@ import { Card } from '../interface/card.inteface';
 })
 export class PokemonService {
   private decks: Deck[] = [];
+  private editedDeck: Deck | null = null;
+
 
   constructor(private http: HttpClient) { }
 
@@ -80,6 +82,28 @@ export class PokemonService {
     }
   }
 
+  getRandomCards(count: number = 24): Observable<Card[]> {
+    return this.getDecks(1) // supondo que a primeira página tenha uma grande variedade de cartas
+      .pipe(
+        map(response => {
+          const randomCards: Card[] = [];
+          for (let i = 0; i < count; i++) {
+            const randomIndex = Math.floor(Math.random() * response.cards.length);
+            randomCards.push(response.cards[randomIndex]);
+          }
+          return randomCards;
+        })
+      );
+  }
+
+  setCurrentEditedDeck(deck: Deck): void {
+    this.editedDeck = deck;
+  }
+  
+  getCurrentEditedDeck(): Deck | null {
+    return this.editedDeck;
+  }
+
   addDeck(deck: Deck): void {
     deck.cards = deck.cards || [];
     this.decks.push(deck);
@@ -89,6 +113,7 @@ export class PokemonService {
     const index = this.decks.findIndex(deck => deck.id === id);
     if (index !== -1) {
       this.decks[index] = updatedDeck;
+      this.setCurrentEditedDeck(updatedDeck); // adicionado esta linha
     }
   }
 

@@ -3,8 +3,8 @@
   <!-- Detalhes do Baralho -->
   <div class="bg-white p-6 rounded-lg shadow-md mb-6">
     <h2 class="text-2xl mb-4">Baralho: {{ deck.name }}</h2>
-    <img [src]="deck.imageUrl" alt="{{ deck.name }}" class="mx-auto mb-4" />
-    <div class="flex justify-center space-x-4">
+    <img *ngIf="deck.imageUrl" [src]="deck.imageUrl" alt="{{ deck.name }}" class="mx-auto mb-4" />
+    <div *ngIf="deck.imageUrl" class="flex justify-center space-x-4">
       <p class="border p-2 rounded">Supertype: {{ deck.supertype }}</p>
       <p class="border p-2 rounded">Subtype: {{ deck.subtype }}</p>
     </div>
