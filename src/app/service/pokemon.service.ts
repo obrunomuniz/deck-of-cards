@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environment/environment';
 import { Deck, PokemonTCGResponse } from '../interface/pokemon.interface';
-
+import { Card } from '../interface/card.inteface';
 @Injectable({
   providedIn: 'root'
 })
@@ -33,33 +33,54 @@ export class PokemonService {
   loadDecks(): Observable<Deck[]> {
     return this.getDecks().pipe(
       map((response: PokemonTCGResponse) => {
-        console.log("Resposta da API:", response);
-        const apiDecks: Deck[] = response.cards.map((deck: Deck) => (
-          {
-            id: deck.id, name: deck.name,
-            imageUrl: deck.imageUrl,
-            imageUrlHiRes: deck.imageUrlHiRes,
-            supertype: deck.supertype,
-            subtype: deck.subtype,
-            number: deck.number,
-            artist: deck.artist,
-            rarity: deck.rarity,
-            series: deck.series,
-            set: deck.set,
-            setCode: deck.setCode,
-            attacks: deck.attacks,
-            weaknesses: deck.weaknesses,
-            resistances: deck.resistances
-          }
-        ));
-        console.log("apiDecks", apiDecks)
+        const apiDecks: Deck[] = response.cards.map((deck: Deck) => {
+          return {
+            ...deck,
+            cards: deck.cards || []
+          };
+        });
         return [...apiDecks, ...this.decks];
       })
     );
   }
 
-  // Métodos relacionados aos baralhos em memória
+  addCardToDeck(deckId: string, card: Card): void {
+    const deck = this.decks.find(d => d.id === deckId);
+    if (deck) {
+      deck.cards = deck.cards || [];
+      const existingCard = deck.cards.find(c => c.name === card.name);
+      if (existingCard) {
+        existingCard.count = existingCard.count || 0;
+        if (existingCard.count < 4) {
+          existingCard.count += 1;
+        } else {
+          //TODO: Mostrar algum erro, já que não pode adicionar mais de 4 cartas com o mesmo nome
+        }
+      } else {
+        card.count = 1;
+        deck.cards.push(card);
+      }
+    }
+  }
+
+  removeCardFromDeck(deckId: string, cardId: string): void {
+    const deck = this.decks.find(d => d.id === deckId);
+    if (deck && deck.cards) {
+      const card = deck.cards.find((c, index) => c.id === cardId);
+      if (card) {
+        card.count = card.count || 0;
+        if (card.count > 1) {
+          card.count -= 1;
+        } else {
+          const cardIndex = deck.cards.indexOf(card);
+          deck.cards.splice(cardIndex, 1);
+        }
+      }
+    }
+  }
+
   addDeck(deck: Deck): void {
+    deck.cards = deck.cards || [];
     this.decks.push(deck);
   }
 

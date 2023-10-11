@@ -1,9 +1,71 @@
-
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
-<div *ngIf="deck">
-    <h2>Name: {{ deck.name }}</h2>
-    <img [src]="deck.imageUrl" alt="{{ deck.name }}" />
-    <p>Supertype: {{ deck.supertype }}</p>
-    <p>Subtype: {{ deck.subtype }}</p>
+<div *ngIf="deck" class="container mx-auto p-6">
+  <!-- Detalhes do Baralho -->
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-2xl mb-4">Baralho: {{ deck.name }}</h2>
+    <img [src]="deck.imageUrl" alt="{{ deck.name }}" class="mx-auto mb-4" />
+    <div class="flex justify-center space-x-4">
+      <p class="border p-2 rounded">Supertype: {{ deck.supertype }}</p>
+      <p class="border p-2 rounded">Subtype: {{ deck.subtype }}</p>
+    </div>
   </div>
-  
+
+  <!-- Cartas no Baralho -->
+
+
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl">Cartas no Baralho</h3>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center"
+        (click)="openAddCardDialog()">
+        <igx-icon family="material" class="text-xl m-0 p-0" style="position: relative; top: -2px;">add</igx-icon>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+      <div *ngFor="let cardItem of deckCards" class="p-4 rounded">
+        <igx-card>
+          <igx-card-header>
+            <span igxCardHeaderTitle>{{ cardItem.name }}</span>
+          </igx-card-header>
+          <igx-card-actions>
+            <button igxButton="icon" (click)="removeCardFromDeck(cardItem.id)">
+              <igx-icon>delete</igx-icon>
+            </button>
+          </igx-card-actions>
+        </igx-card>
+      </div>
+
+      <div *ngIf="deckCards.length === 0" class="text-center my-4 col-span-full">
+        <p class="text-lg mb-2">Você ainda não adicionou nenhuma carta ao seu baralho.</p>
+        <button class="bg-blue-500 text-white p-2 rounded" (click)="openAddCardDialog()">
+          Adicione uma agora
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal adicionar cartas-->
+<igx-dialog #cardDialog [closeOnOutsideSelect]="true">
+  <igx-dialog-title>
+    Adicionar Carta ao Baralho
+  </igx-dialog-title>
+  <form [formGroup]="cardForm" (ngSubmit)="onAddCard()">
+    <igx-input-group>
+      <igx-prefix>
+        <igx-icon>note</igx-icon>
+      </igx-prefix>
+      <label igxLabel for="cardName">Nome da Carta</label>
+      <input igxInput type="text" id="cardName" formControlName="cardName" required />
+      <div *ngIf="cardForm.controls['cardName'].invalid && cardForm.controls['cardName'].touched"
+        class="text-red-500 text-xs mt-1">
+        O nome da carta é obrigatório.
+      </div>
+    </igx-input-group>
+  </form>
+  <div igxDialogActions>
+    <button igxButton (click)="cardDialog.close()">CANCELAR</button>
+    <button igxButton (click)="onAddCard()">ADICIONAR</button>
+  </div>
+</igx-dialog>

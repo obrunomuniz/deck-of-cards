@@ -46,7 +46,6 @@ export class DeckListComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Função para carregar os dados
   loadData() {
     this.loading = true;
     this.pokemonService.loadDecks().subscribe({
@@ -68,7 +67,7 @@ export class DeckListComponent implements OnInit {
     this.updateDisplayedDecks();
   }
 
-  viewDeckDetails(id: string): void { 
+  viewDeckDetails(id: string): void {
     this.router.navigate(['/deck-detail', id]);
   }
 
@@ -132,7 +131,6 @@ export class DeckListComponent implements OnInit {
       this.deckForm.reset();
     }
   }
-
 
   closeModal() {
     this.isOpen = false;
