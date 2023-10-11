@@ -37,10 +37,17 @@ export class DeckListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+
+    // Verificar se há um baralho editado após salvar e carregá-lo se existir
+    const editedDeck = this.pokemonService.getCurrentEditedDeck();
+    if (editedDeck) {
+        this.decks.unshift(editedDeck);
+    }
+
     this.deckForm = this.fb.group({
-      deckName: ['', Validators.required],
+        deckName: ['', Validators.required],
     });
-  }
+}
 
   ngAfterViewInit() {
     this.cdr.detectChanges();
@@ -49,17 +56,22 @@ export class DeckListComponent implements OnInit {
   loadData() {
     this.loading = true;
     this.pokemonService.loadDecks().subscribe({
-      next: decks => {
-        this.decks.unshift(...decks);
-        this.updateDisplayedDecks();
-        this.loading = false;
-      },
-      error: error => {
-        console.error('Erro ao obter baralhos:', error);
-        this.loading = false;
-      }
+        next: decks => {
+            decks.forEach(deck => {
+                if (!this.decks.some(d => d.id === deck.id)) {
+                    this.decks.push(deck);
+                }
+            });
+            this.updateDisplayedDecks();
+            this.loading = false;
+        },
+        error: error => {
+            console.error('Erro ao obter baralhos:', error);
+            this.loading = false;
+        }
     });
-  }
+}
+
 
   removeDeck(id: string): void {
     this.pokemonService.removeDeck(id);

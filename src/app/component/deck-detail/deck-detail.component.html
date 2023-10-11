@@ -3,8 +3,8 @@
   <!-- Detalhes do Baralho -->
   <div class="bg-white p-6 rounded-lg shadow-md mb-6">
     <h2 class="text-2xl mb-4">Baralho: {{ deck.name }}</h2>
-    <img [src]="deck.imageUrl" alt="{{ deck.name }}" class="mx-auto mb-4" />
-    <div class="flex justify-center space-x-4">
+    <img *ngIf="deck.imageUrl" [src]="deck.imageUrl" alt="{{ deck.name }}" class="mx-auto mb-4" />
+    <div *ngIf="deck.imageUrl" class="flex justify-center space-x-4">
       <p class="border p-2 rounded">Supertype: {{ deck.supertype }}</p>
       <p class="border p-2 rounded">Subtype: {{ deck.subtype }}</p>
     </div>
@@ -16,11 +16,17 @@
   <div class="bg-white p-6 rounded-lg shadow-md mb-6">
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-xl">Cartas no Baralho</h3>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center"
-        (click)="openAddCardDialog()">
-        <igx-icon family="material" class="text-xl m-0 p-0" style="position: relative; top: -2px;">add</igx-icon>
-      </button>
-    </div>
+      <div class="flex space-x-2">
+          <button class="bg-green-500 hover:bg-green-700 text-white w-12 h-12 rounded-full flex items-center justify-center"
+              (click)="openAddCardDialog()">
+              <igx-icon family="material" class="text-xl m-0 p-0" style="position: relative; top: -2px;">add</igx-icon>
+          </button>
+          <button class="bg-blue-500 hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center"
+              (click)="saveDeck()">
+              <igx-icon family="material" class="text-xl m-0 p-0" style="position: relative; top: -2px;">save</igx-icon>
+          </button>
+      </div>
+  </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
       <div *ngFor="let cardItem of deckCards" class="p-4 rounded">
@@ -69,3 +75,5 @@
     <button igxButton (click)="onAddCard()">ADICIONAR</button>
   </div>
 </igx-dialog>
+
+<igx-snackbar #snackbar [actionText]="actionText" (clicked)="snackClick($event)">{{message}}</igx-snackbar>
