@@ -39,8 +39,11 @@ export class DeckDetailComponent implements OnInit {
 
   removeCardFromDeck(cardId: string): void {
     if (this.deck) {
-      this.pokemonService.removeCardFromDeck(this.deck.id, cardId);
-      this.deckCards = this.deck.cards || [];
+      this.pokemonService.removeCardFromDeck(this.deck.id, cardId); 
+      const cardIndex = this.deckCards.findIndex(card => card.id === cardId);
+      if (cardIndex !== -1) {
+        this.deckCards.splice(cardIndex, 1);
+      }
     }
   }
 
