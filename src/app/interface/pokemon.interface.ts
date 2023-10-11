@@ -1,12 +1,14 @@
+import { Card } from "./card.inteface";
+
 export interface PokemonTCGResponse {
-  cards: Card[];
+  cards: Deck[];
   page?: number;
   pageSize?: number;
   count?: number;
   totalCount?: number;
 }
 
-export interface Card {
+export interface Deck {
   id: string;
   name: any;
   nationalPokedexNumber?: number;
@@ -28,6 +30,7 @@ export interface Card {
   attacks?: Attack[];
   weaknesses?: Weakness[];
   resistances?: Resistance[];
+  cards?: Card[];
 }
 
 export interface Attack {

@@ -3,25 +3,25 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environment/environment';
-import { Card, PokemonTCGResponse } from '../interface/pokemon.interface';
-
+import { Deck, PokemonTCGResponse } from '../interface/pokemon.interface';
+import { Card } from '../interface/card.inteface';
 @Injectable({
   providedIn: 'root'
 })
 export class PokemonService {
-  private decks: Card[] = [];
+  private decks: Deck[] = [];
 
   constructor(private http: HttpClient) { }
 
-  // Métodos relacionados à API do Pokémon
-  getCards(page: number = 1): Observable<PokemonTCGResponse> {
+  // Métodos relacionados aos baralhos
+  getDecks(page: number = 1): Observable<PokemonTCGResponse> {
     return this.http.get<PokemonTCGResponse>(`${environment.api.url}cards?page=${page}`);
   }
 
-  getCard(id: string): Observable<Card> {
-    const card = this.decks.find(deck => deck.id === id);
-    if (card) {
-      return of(card);
+  getDeck(id: string): Observable<Deck> {
+    const deck = this.decks.find(deck => deck.id === id);
+    if (deck) {
+      return of(deck);
     } else {
       return this.http.get<any>(`${environment.api.url}cards/${id}`)
         .pipe(
@@ -29,46 +29,62 @@ export class PokemonService {
         );
     }
   }
-  
 
-  loadCards(): Observable<Card[]> {
-    return this.getCards().pipe(
+  loadDecks(): Observable<Deck[]> {
+    return this.getDecks().pipe(
       map((response: PokemonTCGResponse) => {
-        console.log("Resposta da API:", response);
-        const apiDecks: Card[] = response.cards.map((card: Card) => (
-          {
-            id: card.id, name: card.name,
-            imageUrl: card.imageUrl,
-            imageUrlHiRes: card.imageUrlHiRes,
-            supertype: card.supertype,
-            subtype: card.subtype,
-            number: card.number,
-            artist: card.artist,
-            rarity: card.rarity,
-            series: card.series,
-            set: card.set,
-            setCode: card.setCode,
-            attacks: card.attacks,
-            weaknesses: card.weaknesses,
-            resistances: card.resistances
-          }
-        ));
-        console.log("apiDecks", apiDecks)
+        const apiDecks: Deck[] = response.cards.map((deck: Deck) => {
+          return {
+            ...deck,
+            cards: deck.cards || []
+          };
+        });
         return [...apiDecks, ...this.decks];
       })
     );
   }
 
-  // Métodos relacionados aos baralhos em memória
-  addDeck(deck: Card): void {
+  addCardToDeck(deckId: string, card: Card): void {
+    const deck = this.decks.find(d => d.id === deckId);
+    if (deck) {
+      deck.cards = deck.cards || [];
+      const existingCard = deck.cards.find(c => c.name === card.name);
+      if (existingCard) {
+        existingCard.count = existingCard.count || 0;
+        if (existingCard.count < 4) {
+          existingCard.count += 1;
+        } else {
+          //TODO: Mostrar algum erro, já que não pode adicionar mais de 4 cartas com o mesmo nome
+        }
+      } else {
+        card.count = 1;
+        deck.cards.push(card);
+      }
+    }
+  }
+
+  removeCardFromDeck(deckId: string, cardId: string): void {
+    const deck = this.decks.find(d => d.id === deckId);
+    if (deck && deck.cards) {
+      const card = deck.cards.find((c, index) => c.id === cardId);
+      if (card) {
+        card.count = card.count || 0;
+        if (card.count > 1) {
+          card.count -= 1;
+        } else {
+          const cardIndex = deck.cards.indexOf(card);
+          deck.cards.splice(cardIndex, 1);
+        }
+      }
+    }
+  }
+
+  addDeck(deck: Deck): void {
+    deck.cards = deck.cards || [];
     this.decks.push(deck);
   }
 
-  getDeck(id: string): Card | undefined {
-    return this.decks.find(deck => deck.id === id);
-  }
-
-  editDeck(id: string, updatedDeck: Card): void {
+  editDeck(id: string, updatedDeck: Deck): void {
     const index = this.decks.findIndex(deck => deck.id === id);
     if (index !== -1) {
       this.decks[index] = updatedDeck;
