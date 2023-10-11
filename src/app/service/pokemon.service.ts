@@ -44,23 +44,24 @@ export class PokemonService {
     );
   }
 
-  addCardToDeck(deckId: string, card: Card): void {
+  addCardToDeck(deckId: string, card: Card): boolean {
     const deck = this.decks.find(d => d.id === deckId);
-    if (deck) {
-      deck.cards = deck.cards || [];
-      const existingCard = deck.cards.find(c => c.name === card.name);
-      if (existingCard) {
-        existingCard.count = existingCard.count || 0;
-        if (existingCard.count < 4) {
-          existingCard.count += 1;
-        } else {
-          //TODO: Mostrar algum erro, já que não pode adicionar mais de 4 cartas com o mesmo nome
-        }
-      } else {
-        card.count = 1;
-        deck.cards.push(card);
-      }
+
+    if (!deck) return false;
+
+    deck.cards = deck.cards || [];
+
+    const existingCard = deck.cards.find(c => c.name === card.name);
+
+    if (existingCard) {
+      existingCard.count = (existingCard.count || 0) + 1;
+      if (existingCard.count > 4) return false;
+    } else {
+      card.count = 1;
+      deck.cards.push(card);
     }
+
+    return true;
   }
 
   removeCardFromDeck(deckId: string, cardId: string): void {

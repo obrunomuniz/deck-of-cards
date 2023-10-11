@@ -69,3 +69,5 @@
     <button igxButton (click)="onAddCard()">ADICIONAR</button>
   </div>
 </igx-dialog>
+
+<igx-snackbar #snackbar [actionText]="actionText" (clicked)="snackClick($event)">{{message}}</igx-snackbar>
