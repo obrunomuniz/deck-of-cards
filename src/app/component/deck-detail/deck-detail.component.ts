@@ -100,4 +100,8 @@ export class DeckDetailComponent implements OnInit {
     this.cardDialog.close();
     this.cardForm.reset();
   }
+
+  saveDeck(){
+    this.router.navigate(['/decks']);
+  }
 }
