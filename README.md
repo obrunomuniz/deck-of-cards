@@ -1,27 +1,48 @@
-# DeckOfCards
+# Projeto feito com Angular, TailwindCSS e Infragistics
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.4.
+Este projeto foi criado para os amantes de Pokémon, oferecendo uma interface amigável e interativa para explorar e conhecer seus Pokémon favoritos. Construído utilizando as mais recentes tecnologias, este projeto combina a agilidade do Angular 16 com a flexibilidade do TailwindCSS e os robustos componentes UI do Infragistics.
 
-## Development server
+## Tecnologias Utilizadas
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Angular 16**: A principal tecnologia utilizada para a estrutura e lógica do projeto.
+- **TailwindCSS**: Uma biblioteca CSS para design de interface rapidamente sem sair do seu HTML.
+  - [Documentação oficial](https://tailwindcss.com/)
+- **Infragistics**: Fornece poderosos componentes de UI para uma experiência rica e interativa.
+  - [Documentação oficial](https://infragistics.com)
 
-## Code scaffolding
+## Sobre a API Pokémon
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Este projeto consome dados da popular API Pokémon, uma fonte confiável e extensiva de informações sobre o universo Pokémon. Graças a esta API, o usuário pode explorar uma vasta gama de Pokémon, seus tipos, habilidades e muito mais.
 
-## Build
+## Preview do Projeto
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Confira o projeto ao vivo e em ação! Faça uma visita e veja por si mesmo:
 
-## Running unit tests
+[Preview no Heroku](https://pokemon-angular-project-17c8f6ea7dfc.herokuapp.com/)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Lista de TODO
 
-## Running end-to-end tests
+- [ ] Melhorar todo o layout deixando-o mais rico e com uma melhor experiência para o usuário
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Como fazer o deploy
+Basta abrir um MR para a branch main que o deploy será feito através do Heroku
 
-## Further help
+## Como rodar localmente
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+1. **Clonar o Repositório**
+
+   ```bash
+   git clone https://github.com/obrunomuniz/deck-of-cards.git
+   cd deck-of-cards
+
+2. **Instalar as dependências**
+
+   ```bash
+   npm install
+   
+3. **Rodar o projeto**
+
+   ```bash
+   ng serve
+4. **Ser feliz**
+   
