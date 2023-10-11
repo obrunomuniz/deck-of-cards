@@ -9,7 +9,8 @@ import { PokemonService } from 'src/app/service/pokemon.service';
 })
 export class CardDetailComponent implements OnInit {
   card: Card | null = null;
-  loading: boolean = false; 
+  loading: boolean = false;
+  deckCards: Card[] = [];  // As cartas que estão dentro do baralho atual
 
   constructor(private route: ActivatedRoute, private pokemonService: PokemonService) { }
 
@@ -22,5 +23,20 @@ export class CardDetailComponent implements OnInit {
         this.loading = false;
       });
     }
+    this.getDeckCards();
+  }
+
+  getDeckCards(): void {
+    // Lógica para obter as cartas que pertencem a este baralho
+    // Atualize a variável 'deckCards'
+  }
+
+  removeCardFromDeck(cardId: string): void {
+    // Lógica para remover uma carta do baralho
+  }
+
+  addCardsToDeck(): void {
+    // Lógica para adicionar cartas ao baralho
+    // Você pode redirecionar o usuário para uma tela de seleção ou mostrar um modal/popup para a seleção
   }
 }

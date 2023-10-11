@@ -155,4 +155,7 @@ export class CardListComponent implements OnInit {
       }
     }
   }
+  createDeck(): void {
+    this.router.navigate(['/create-deck']);
+  }
 }

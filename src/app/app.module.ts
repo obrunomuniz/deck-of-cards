@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule, IPaginatorResourceStrings, changei18n, IgxDialogModule, IgxInputGroupModule, IgxNavbarModule } from 'igniteui-angular';
+import { IgxButtonModule, IgxGridModule, IgxIconModule, IgxNavigationDrawerModule, IgxPaginatorModule, IgxRippleModule, IgxSwitchModule, IgxToggleModule, IPaginatorResourceStrings, changei18n, IgxDialogModule, IgxInputGroupModule, IgxNavbarModule, IgxBadgeModule, IgxCardModule } from 'igniteui-angular';
  import { HeaderComponent } from './component/header/header.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PokemonService } from './service/pokemon.service';
@@ -37,7 +37,10 @@ import { CardDetailComponent } from './component/card-detail/card-detail.compone
     IgxIconModule, 
     IgxInputGroupModule,
     ReactiveFormsModule,
-    IgxNavbarModule
+    IgxNavbarModule,
+    IgxBadgeModule,
+    IgxCardModule,
+    IgxCardModule
   ],
   providers: [PokemonService, ],
   bootstrap: [AppComponent]

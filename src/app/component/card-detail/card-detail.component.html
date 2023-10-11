@@ -1,9 +1,35 @@
-
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
-<div *ngIf="card">
-    <h2>Name: {{ card.name }}</h2>
-    <img [src]="card.imageUrl" alt="{{ card.name }}" />
-    <p>Supertype: {{ card.supertype }}</p>
-    <p>Subtype: {{ card.subtype }}</p>
+
+<div *ngIf="card" class="container mx-auto p-6">
+  <!-- Detalhes do Baralho -->
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-2xl mb-4">Baralho: {{ card.name }}</h2>
+    <img [src]="card.imageUrl" alt="{{ card.name }}" class="mx-auto mb-4" />
+    <div class="flex justify-center space-x-4">
+      <p class="border p-2 rounded">Supertype: {{ card.supertype }}</p>
+      <p class="border p-2 rounded">Subtype: {{ card.subtype }}</p>
+    </div>
   </div>
-  
+
+  <!-- Cartas no Baralho -->
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h3 class="text-xl mb-4">Cartas no Baralho</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+      <div class="p-4 rounded">
+        <igx-card>
+          <igx-card-header>
+            <span igxCardHeaderTitle>Nome</span>
+          </igx-card-header>
+          <igx-card-actions>
+            <button igxButton="icon"><igx-icon>delete</igx-icon></button>
+          </igx-card-actions>
+        </igx-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão para adicionar cartas ao baralho -->
+  <div class="flex justify-center">
+    <button class="bg-green-500 text-white p-2 rounded" (click)="addCardsToDeck()">Adicionar Cartas ao Baralho</button>
+  </div>
+</div>

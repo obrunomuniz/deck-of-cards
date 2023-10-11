@@ -4,12 +4,13 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environment/environment';
 import { Card, PokemonTCGResponse } from '../interface/pokemon.interface';
+import { Deck } from '../interface/deck.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PokemonService {
-  private decks: Card[] = [];
+  private decks: Deck[] = [];
   private cards: Card[] = [];
 
   constructor(private http: HttpClient) { }
@@ -73,28 +74,15 @@ export class PokemonService {
   addCard(card: Card): void {
     this.cards.push(card);
   }
-  
 
   // Métodos relacionados aos baralhos em memória
-  addDeck(deck: Card): void {
+ addDeck(deck: Deck): void {
     this.decks.push(deck);
-  }
+}
 
-  getDeck(id: string): Card | undefined {
-    return this.decks.find(deck => deck.id === id);
-  }
-
-  editDeck(id: string, updatedDeck: Card): void {
-    const index = this.decks.findIndex(deck => deck.id === id);
-    if (index !== -1) {
-      this.decks[index] = updatedDeck;
-    }
-  }
-
-  removeDeck(id: string): void {
-    this.decks = this.decks.filter(deck => deck.id !== id);
-  }
-
+ getDecks(): Observable<Deck[]> {
+  return of(this.decks);
+}
   // Métodos para o tema
   getTheme(): string | null {
     return localStorage.getItem('theme');
