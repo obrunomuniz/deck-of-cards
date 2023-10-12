@@ -165,4 +165,21 @@ export class DeckListComponent implements OnInit {
       }
     }
   }
+
+  getCardTypeCounts(deck: Deck): { pokemonCount: number, trainerCount: number } {
+    let pokemonCount = 0;
+    let trainerCount = 0;
+  
+    if (deck.cards) {
+      for (const card of deck.cards) {
+        if (card.supertype === 'Pokémon') {
+          pokemonCount++;
+        } else if (card.supertype === 'Trainer') {
+          trainerCount++;
+        }
+      }
+    }
+  
+    return { pokemonCount, trainerCount };
+  }
 }
