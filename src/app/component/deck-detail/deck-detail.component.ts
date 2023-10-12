@@ -116,7 +116,7 @@ export class DeckDetailComponent implements OnInit {
         name: newCardName,
         types: newCardTypes
       };
-      this.deckCards.push(newCard);
+      this.deckCards.unshift(newCard);
     }
     this.cardDialog.close();
     this.cardForm.reset();
