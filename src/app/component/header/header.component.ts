@@ -17,8 +17,7 @@ export class HeaderComponent implements OnInit {
     private toggleButton: IgxToggleDirective | null = null;
 
     public navItems = [
-        { name: 'view_module', text: 'Baralhos', route: '/decks' },
-        { name: 'add_box', text: 'Criar Baralho', route: '/decks/new' }
+        { name: 'view_module', text: 'Baralhos', route: '/decks' }
     ]; 
 
     public selected = 'Baralhos'; 

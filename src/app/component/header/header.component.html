@@ -2,7 +2,7 @@
   <igx-nav-drawer id="navigation" #drawer [isOpen]="isOpen" [pinThreshold]="5000">
       <ng-template igxDrawer>
           <nav>
-              <span igxDrawerItem [isHeader]="true">Components</span>
+              <span igxDrawerItem [isHeader]="true">Pokémon TCG</span>
               <span *ngFor="let item of navItems" igxDrawerItem [active]="item.text === selected" igxRipple (click)="navigateTo(item)">
                   <igx-icon family="material">{{ item.name }}</igx-icon>
                   <span>{{ item.text }}</span>
