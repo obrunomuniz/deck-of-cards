@@ -28,7 +28,8 @@ export class DeckDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private pokemonService: PokemonService,
     private router: Router, private fb: FormBuilder) {
     this.cardForm = this.fb.group({
-      cardName: ['', Validators.required]
+      cardName: ['', Validators.required],
+      cardTypes: ['', Validators.required] 
     });
   }
 
@@ -40,7 +41,7 @@ export class DeckDetailComponent implements OnInit {
         this.deck = deck;
         this.currentDeckId = deck.id;
         this.currentDeckName = deck.name;
-
+        console.log("this.deck", this.deck);
         // Verificando se o baralho é novo (sem cartas)
         if (this.deck.cards && this.deck.cards.length === 0) {
           this.pokemonService.getRandomCards(24).subscribe(randomCards => {
@@ -92,6 +93,8 @@ export class DeckDetailComponent implements OnInit {
     }
 
     const newCardName = this.cardForm.value.cardName;
+    const newCardTypes = this.cardForm.value.cardTypes;
+
     const cardsWithSameName = this.deckCards.filter(card => card.name === newCardName);
 
     //Verifica se a carta já existe no deck
@@ -99,7 +102,8 @@ export class DeckDetailComponent implements OnInit {
       if (cardsWithSameName.length < 4) {
         const newCard: Card = {
           id: Math.random().toString(36).substring(7),
-          name: newCardName
+          name: newCardName,
+          types: newCardTypes
         };
         this.deckCards.push(newCard);
       } else {
@@ -109,7 +113,8 @@ export class DeckDetailComponent implements OnInit {
     } else {
       const newCard: Card = {
         id: Math.random().toString(36).substring(7),
-        name: newCardName
+        name: newCardName,
+        types: newCardTypes
       };
       this.deckCards.push(newCard);
     }
@@ -137,4 +142,14 @@ export class DeckDetailComponent implements OnInit {
     }
     this.router.navigate(['/decks']);   
   }
+
+  getUniqueTypes(): string[] {
+    let types: string[] = [];
+    for (let card of this.deckCards) {
+        if (card.types) {
+            types = types.concat(card.types);
+        }
+    }
+    return [...new Set(types)];
+}
 }
