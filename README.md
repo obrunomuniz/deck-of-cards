@@ -30,7 +30,12 @@ Basta abrir um MR para a branch main que o deploy será feito através do Heroku
 <img width="1728" alt="image" src="https://github.com/obrunomuniz/deck-of-cards/assets/29904290/4ef0ae58-b034-4273-94c7-d176b9f2e1f2">
 <br><br>
 <img width="1728" alt="image" src="https://github.com/obrunomuniz/deck-of-cards/assets/29904290/a1c72346-08eb-49d4-a9d2-1c9a7d74628f">
-
+<br><br>
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/obrunomuniz/deck-of-cards/assets/29904290/7ec223e1-d14a-41c7-865c-981d23e34032" width="333" />
+  <img src="https://github.com/obrunomuniz/deck-of-cards/assets/29904290/eda57738-03ab-493b-894c-8aa491bf128d" width="333" />
+  <img src="https://github.com/obrunomuniz/deck-of-cards/assets/29904290/60181fd0-d0ac-42d2-886f-152f4ce10bb4" width="333" />
+</div>
 
 <br><br>
 ## Lista de TODO
