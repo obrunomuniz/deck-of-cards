@@ -7,6 +7,9 @@
     <div *ngIf="deck.imageUrl" class="flex justify-center space-x-4">
       <p class="border p-2 rounded">Supertype: {{ deck.supertype }}</p>
       <p class="border p-2 rounded">Subtype: {{ deck.subtype }}</p>
+      <p *ngIf="deckCards.length === 0" class="border p-2 rounded">Não há cartas no baralho.</p>
+      <p *ngIf="deckCards.length > 0" class="border p-2 rounded">Tipos únicos no baralho: {{ getUniqueTypes().length }}</p>
+      
     </div>
   </div>
 
@@ -69,6 +72,18 @@
         O nome da carta é obrigatório.
       </div>
     </igx-input-group>
+    <igx-input-group>
+      <igx-prefix>
+        <igx-icon>label</igx-icon>
+      </igx-prefix>
+      <label igxLabel for="cardTypes">Tipos da Carta (Separados por vírgula)</label>
+      <input igxInput type="text" id="cardTypes" formControlName="cardTypes" />
+      <div *ngIf="cardForm.controls['cardTypes'].invalid && cardForm.controls['cardTypes'].touched"
+        class="text-red-500 text-xs mt-1">
+        O typo da carta é obrigatório.
+      </div>
+    </igx-input-group>
+    
   </form>
   <div igxDialogActions>
     <button igxButton (click)="cardDialog.close()">CANCELAR</button>
